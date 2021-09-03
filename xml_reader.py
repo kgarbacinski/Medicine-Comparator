@@ -2,7 +2,7 @@ from urllib import request
 from bs4 import BeautifulSoup
 
 
-class MedicineProduct:
+class MedicinalProduct:
 
     units = [' mg/ml', ' g/l', ' g/50 ml', ' g/100 ml',
              ' mg (nie mniej niż 150 mln żywych prątków BCG)/ml',
@@ -53,5 +53,5 @@ medicines = soup.find_all('produktLeczniczy')
 medicines_list = []
 for medicine in medicines:
     for pack in medicine.find_all('opakowanie'):
-        m = MedicineProduct(medicine, pack)
+        m = MedicinalProduct(medicine, pack)
         medicines_list.append(m)
