@@ -1,9 +1,10 @@
 import pdfplumber
 import io
 import requests
+import re
 
 
-class Scraper:
+class PDFReader:
 
     def get_page(self, url):
         request = requests.get(url)
@@ -12,26 +13,66 @@ class Scraper:
 
     def get_whole_data(self, file):
         pdf = pdfplumber.open(file)
-        for page in range(len(pdf.pages)):
-            pdf_to_text = ''
-            data = pdf.pages[page].extract_text()
-            pdf_to_text = pdf_to_text + '\n' + data
-            return pdf_to_text
 
-    def get_list_of_excipents(self, pdf_to_text):
-        text_without_footer = pdf_to_text.replace('10     DE/H/0960/001-003/IA/077', '')
-        start = text_without_footer.index('Wykaz substancji pomocniczych')
-        start_length = len('Wykaz substancji pomocniczych')
-        end = text_without_footer.index('Niezgodności farmaceutyczne')
-        text_to_delete = len(text_without_footer) - end
-        excipents = text_without_footer[start + start_length:len(text_without_footer) - text_to_delete - 5].splitlines()
-        sorted_excipents = [x for x in excipents if not x.isdigit()]
-        final_list_of_excipents = [excipent for excipent in sorted_excipents if excipent.strip() != '']
+        pdf_to_text = ''
+        if pdf.pages[0].extract_text() != None:
+            for page in range(len(pdf.pages)):
+                data = pdf.pages[page].extract_text()
+                pdf_to_text += '\n' + data
+            return pdf_to_text
+        return '6.1. Wykaz substancji pomocniczych' \
+               'Nie odczytano PDF-a' \
+               '6.2.  Niezgodności farmaceutyczne'
+
+    def get_set_of_excipents(self, pdf_to_text):
+        start_end_len = self.set_start_end_paragraph(pdf_to_text)
+        excipents_text = pdf_to_text[start_end_len[0] + start_end_len[2]:
+                    len(pdf_to_text) - (len(pdf_to_text) - start_end_len[1]) - 4]
+
+        excipents_text_lines = self.extract_excipents_lines(excipents_text)
+        return set(self.clean_excipents_list(excipents_text_lines))
+
+    def clean_excipents_list(self, excipents_text_lines):
+        final_list_of_excipents = []
+        for i in excipents_text_lines:
+            i = i.strip()
+            try:
+                i = i.replace(re.search('^-\s*', i).group(), '')
+                print(i)
+            except:
+                pass
+
+            if len(i) > 2:
+                final_list_of_excipents.append(i)
         return final_list_of_excipents
 
+    def extract_excipents_lines(self, excipents_text):
+        if ';' in excipents_text:
+            return self.make_excipents_line_by_line(excipents_text, ';').splitlines()
+        elif ',' in excipents_text:
+            return self.make_excipents_line_by_line(excipents_text, ',').splitlines()
+        else:
+            return excipents_text.splitlines()
+
+
+
+
+    def make_excipents_line_by_line(self, excipents_text, split_mark):
+        if excipents_text.count(split_mark) > 1:
+            excipents_text = excipents_text.replace('\n', '')
+            excipents_text = excipents_text.replace(split_mark, '\n')
+            return excipents_text
+        return excipents_text
+
+    def set_start_end_paragraph(self, pdf_to_text):
+        start = pdf_to_text.index(re.search('6.(.)+wykaz(.)+pomocniczych', pdf_to_text, re.IGNORECASE).group()) # 1
+        start_length = len(re.search('6.(.)+wykaz(.)+pomocniczych', pdf_to_text, re.IGNORECASE).group()) # 1
+        end = pdf_to_text.index(re.search('6.(.)+niezgodności(.)+(farmaceutyczne)*', pdf_to_text, re.IGNORECASE).group()) #1
+        return [start, end, start_length]
+
 def main(url):
-    scraper = Scraper()
-    file = scraper.get_page(url) # 'http://leki.urpl.gov.pl/files/Amlopin5mg10mgtabl_dwiedawki.pdf'
+    scraper = PDFReader()
+    file = scraper.get_page(url)
     pdf_to_text = scraper.get_whole_data(file)
-    scraper.get_list_of_excipents(pdf_to_text)
+    return scraper.get_set_of_excipents(pdf_to_text)
 
