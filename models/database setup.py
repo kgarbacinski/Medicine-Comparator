@@ -9,7 +9,8 @@ class MedicineDatabase:
         medicine_table = '''CREATE TABLE IF NOT EXISTS Medicines(
                             MedicineID INTEGER PRIMARY KEY,
                             Name TEXT NOT NULL,
-                            Form TEXT NOT NULL
+                            Form TEXT NOT NULL,
+                            ContentLenght INTEGER NOT NULL
                             ); '''
         self.con.execute(medicine_table)
 
