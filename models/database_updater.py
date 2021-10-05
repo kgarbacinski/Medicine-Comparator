@@ -13,9 +13,9 @@ class DatabaseUpdater:
     medicinal_products = loader.get_medicinal_products()
 
     def update_medicinal_products_base(self):
-
         for i in self.medicinal_products:
             if i['characteristicFileName']:
+                print("if i['characteristicFileName']:")
                 product = MedicinalProductBuilder(i)
 
                 self.add_medicine(product)
@@ -56,6 +56,7 @@ class DatabaseUpdater:
         with MedicineDatabase(self.db_path) as db:
             medicinal_products = db.get_all_medicines()
         for product in medicinal_products:
+            print(product[0])
             if product[3] != self.content_length_getter(product[0]):
                 self.delete_medicine_excipents(product[0])
                 self.add_excipents(product[0])
@@ -86,5 +87,5 @@ class DatabaseUpdater:
         return int(file.headers['Content-Length'])
 
 medicinal_product_updater = DatabaseUpdater()
-medicinal_product_updater.update_medicinal_products_base()
+# medicinal_product_updater.update_medicinal_products_base()
 medicinal_product_updater.update_excipents_base()

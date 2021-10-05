@@ -38,7 +38,6 @@ class PDFReader:
             i = i.strip()
             try:
                 i = i.replace(re.search('^-\s*', i).group(), '')
-                print(i)
             except:
                 pass
 
