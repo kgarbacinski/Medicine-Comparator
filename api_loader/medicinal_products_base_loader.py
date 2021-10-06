@@ -4,11 +4,6 @@ import json
 
 class MedicinalProductsBaseLoader:
     def __init__(self):
-        self.total_elements = \
-            json.loads(requests.get(
-                url=f'https://rejestrymedyczne.ezdrowie.gov.pl/api/rpl/medicinal-products/search/public?' \
-                    f'specimenTypeEnum=L&' \
-                    f'isAdvancedSearch=false').text)['totalElements']
         self.total_pages = json.loads(requests.get(url=self.get_url()).text)['totalPages']
 
     def get_url(self, page=0):
@@ -16,7 +11,7 @@ class MedicinalProductsBaseLoader:
                f'page={page}&' \
                f'specimenTypeEnum=L&' \
                f'isAdvancedSearch=false&' \
-               f'size={self.total_elements}'
+               f'size=1000'
 
     def get_medicinal_products(self):
         all_medicinal_products = []
