@@ -49,14 +49,14 @@ class MedicineDatabase:
                             ); '''
         self.con.execute(medicine_active_substances_table)
 
-    def create_medicines_active_substances_values_table(self):
-        medicine_active_substances_values_table = '''CREATE TABLE IF NOT EXISTS MedicinesActiveSubstancesValues (
+    def create_medicines_active_substances_details_table(self):
+        medicine_active_substances_details_table = '''CREATE TABLE IF NOT EXISTS MedicinesActiveSubstancesDetails (
                                                 ID INTEGER PRIMARY KEY,
                                                 Concentration TEXT NOT NULL,
                                                 Unit TEXT NOT NULL,
                                                 FOREIGN KEY(ID) REFERENCES MedicinesActiveSubstances (ID)
                                                 ); '''
-        self.con.execute(medicine_active_substances_values_table)
+        self.con.execute(medicine_active_substances_details_table)
 
     def create_ean_table(self):
         ean_table = '''CREATE TABLE IF NOT EXISTS EanTable(
@@ -80,8 +80,8 @@ class MedicineDatabase:
                 "(MedicineID, ActiveSubstanceId) VALUES (?, ?)"
         self.con.execute(query, (medicine_id, str(active_substance_id[0])))
 
-    def add_to_table_medicines_active_substances_values(self, medicines_active_substances_id, concentration, unit):
-        query = "INSERT INTO MedicinesActiveSubstancesValues " \
+    def add_to_table_medicines_active_substances_details(self, medicines_active_substances_id, concentration, unit):
+        query = "INSERT INTO MedicinesActiveSubstancesDetails " \
                 "(Id, Concentration, Unit) VALUES (?, ?, ?)"
         self.con.execute(query, (str(medicines_active_substances_id[0]), str(concentration), unit))
 
@@ -154,5 +154,5 @@ with MedicineDatabase('models/medicine.db') as db:
     db.create_excipents_table()
     db.create_ean_table()
     db.create_medicines_active_substances_table()
-    db.create_medicines_active_substances_values_table()
+    db.create_medicines_active_substances_details_table()
     db.create_medicines_excipents_table()

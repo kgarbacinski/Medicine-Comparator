@@ -39,9 +39,9 @@ class DatabaseUpdater:
                 if not db.get_medicines_active_substances_id(product.id, active_substance_id):
                     db.add_to_table_medicines_active_substances(product.id, active_substance_id)
                     medicines_active_substances_id = db.get_medicines_active_substances_id(product.id, active_substance_id)
-                    db.add_to_table_medicines_active_substances_values(medicines_active_substances_id,
-                                                                product.active_substances_data[substance]['power'],
-                                                                product.active_substances_data[substance]['unit'])
+                    db.add_to_table_medicines_active_substances_details(medicines_active_substances_id,
+                                                                        product.active_substances_data[substance]['power'],
+                                                                        product.active_substances_data[substance]['unit'])
 
     def update_ean_codes(self, product):
         with MedicineDatabase(self.db_path) as db:
@@ -89,4 +89,4 @@ class DatabaseUpdater:
 
 medicinal_product_updater = DatabaseUpdater()
 medicinal_product_updater.update_medicinal_products_base()
-medicinal_product_updater.update_excipents_base()
+# medicinal_product_updater.update_excipents_base()
