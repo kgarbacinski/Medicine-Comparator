@@ -67,7 +67,6 @@ class MedicinalProductBuilder:
                 if i < len(self.active_substances):
                     element = element.strip()
                     e = self.divide_concentrations_and_units(self.active_substances[i], element)
-                    print(self.name, self.active_substances[i])
                     try:
                         power = float(e[self.active_substances[i]]['power'])/parentheses_power
                         unit = f"{e[self.active_substances[i]]['unit']}/{parentheses_unit}"
@@ -75,7 +74,6 @@ class MedicinalProductBuilder:
                         power = e[self.active_substances[i]]['power']
                         unit = e[self.active_substances[i]]['unit']
                     elements.append(f'{power} {unit.split(" ")[0]}')
-                    print(f'{power} {unit.split(" ")[0]}')
             return elements
 
 
@@ -83,23 +81,46 @@ class MedicinalProductBuilder:
     def extract_plus_separated_data(self, product_power_descryption):
         return product_power_descryption.split(' + ')
 
+    def change_decimal_separator(self, primary_pair, separator_to_change=',', new_sparator='.'):
+        if separator_to_change in primary_pair:
+            for char in primary_pair[1:]:
+                if char == separator_to_change and \
+                        primary_pair[primary_pair.index(char) - 1].isdigit() and \
+                        primary_pair[primary_pair.index(char) + 1].isdigit():
+                    return primary_pair.replace(char, new_sparator)
+        return primary_pair
+
+    def prepare_primary_pair_details(self, primary_pair):
+        primary_pair = primary_pair.replace('%', ' %').replace(' ', ' ').replace('–', '-')
+        primary_pair = self.change_decimal_separator(primary_pair)
+        groups = re.search(r'^(\d[\d\ \.\-x\^]*)(([\w\.]*)[\w\+\ \(\)\.]*\/(([\d\.]*)? ?([\w]*))|([\w\.\%]*))?',
+                           primary_pair)
+        concentration = groups.group(1).replace(' ', '')
+        if groups.group(7):
+            unit = groups.group(7).replace(' ', '')
+            divider = 1
+            divider_unit = ''
+        else:
+            unit = groups.group(3).replace(' ', '')
+            divider = groups.group(5).replace(' ', '')
+            if divider == '':
+                divider = 1
+            divider_unit = f'/{groups.group(6).strip()}'
+        return {'concentration': concentration, 'divider': divider, 'unit': unit, 'divider_unit': divider_unit}
 
     def divide_concentrations_and_units(self, substance, primary_pair):
         concentrations_and_units = {}
-        if '%' in primary_pair: primary_pair = primary_pair.replace('%', ' %')
-        if ' ' in primary_pair: primary_pair = primary_pair.replace(' ', ' ')
         if primary_pair and primary_pair[0].isdigit():
-            groups = re.search(r'^(\d[\d* ?\,?\.?\-?x?\^?]*) *((\%*[\w+\.?]*)\/?([\d* ?\,?\.?]*)(\w* ?\w*))', primary_pair)
-            concentration = groups.group(1).replace(',', '.').replace(' ', '')
-            unit = groups.group(2)
-            unit_1 = groups.group(3).replace(' ', '')
-            divider = groups.group(4).replace(',', '.').replace(' ', '')
-            divider_unit = groups.group(5).strip()
-            if divider and divider[0].isdigit():
-                concentrations_and_units.update({substance: {'power': float(concentration) / float(divider),
-                                                             'unit': f'{unit_1}/{divider_unit}'}})
-                return concentrations_and_units
-            concentrations_and_units.update({substance: {'power': concentration, 'unit': unit}})
+            primary_pair_details = self.prepare_primary_pair_details(primary_pair)
+            try:
+                concentrations_and_units.update(
+                    {substance:
+                         {'power': float(primary_pair_details['concentration']) / float(primary_pair_details['divider']),
+                          'unit': f'{primary_pair_details["unit"]}{primary_pair_details["divider_unit"]}'}})
+            except:
+                concentrations_and_units.update(
+                    {substance: {'power': primary_pair_details['concentration'],
+                                 'unit': f'{primary_pair_details["unit"]}{primary_pair_details["divider_unit"]}'}})
             return concentrations_and_units
         concentrations_and_units.update({substance: {'power': primary_pair, 'unit': ''}})
         return concentrations_and_units
