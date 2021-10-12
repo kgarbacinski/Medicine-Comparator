@@ -12,9 +12,9 @@ class DatabaseUpdater:
     medicinal_products = loader.get_medicinal_products()
 
     def update_medicinal_products_base(self):
-        for i in self.medicinal_products:
-            if i['characteristicFileName']:
-                product = MedicinalProductBuilder(i)
+        for product in self.medicinal_products:
+            if product['characteristicFileName']:
+                product = MedicinalProductBuilder(product)
 
                 self.add_medicine(product)
                 self.add_active_substances(product)
@@ -80,7 +80,6 @@ class DatabaseUpdater:
                     db.add_excipent_to_table(excipent)
                 excipent_id = db.get_excipent_id_by_name(excipent)
                 db.add_medicine_excipents_to_table(medicine_id, excipent_id)
-
 
     def content_length_getter(self, product_id):
         url = f'https://rejestrymedyczne.ezdrowie.gov.pl/api/rpl/medicinal-products/{product_id}/characteristic'
