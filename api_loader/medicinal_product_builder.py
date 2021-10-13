@@ -109,13 +109,13 @@ class MedicinalProductBuilder:
         concentration = groups.group(1).replace(' ', '')
         if groups.group(7):
             unit = groups.group(7).replace(' ', '')
-            divider = 1
+            divider = '1'
             divider_unit = ''
         else:
             unit = groups.group(3).replace(' ', '')
             divider = groups.group(5).replace(' ', '')
             if divider == '':
-                divider = 1
+                divider = '1'
             divider_unit = f'/{groups.group(6).strip()}'
         return {'concentration': concentration, 'divider': divider, 'unit': unit, 'divider_unit': divider_unit}
 
