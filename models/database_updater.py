@@ -1,6 +1,6 @@
 from api_loader.medicinal_products_base_loader import MedicinalProductsBaseLoader
 from api_loader.medicinal_product_builder import MedicinalProductBuilder
-from scrapping.medicine_info_scrapper import main
+from scrapping.medicine_info_scrapper import pdf_scrapper
 from models.database_setup import MedicineDatabase
 import requests
 
@@ -66,7 +66,7 @@ class DatabaseUpdater:
         with MedicineDatabase(self.db_path) as db:
             url = f'https://rejestrymedyczne.ezdrowie.gov.pl/api/rpl/medicinal-products/{product_id}/characteristic'
             try:
-                excipents = main(url)
+                excipents = pdf_scrapper(url)
             except:
                 excipents = ['Błąd pobierania danych']
                 print(f'pdfminer.pdfparser.PDFSyntaxError: No /Root object! | medicine_id: {product_id}')
