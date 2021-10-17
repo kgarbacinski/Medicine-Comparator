@@ -1,4 +1,5 @@
 import re
+from .regex_patterns import RegexPatterns
 
 
 class MedicinalProductBuilder:
@@ -65,7 +66,7 @@ class MedicinalProductBuilder:
             print(self.id, self.name)
 
     def get_parentheses_details(self) -> dict:
-        parentheses_groups = re.search(r'^\((.*)\) ?\/((\d*\.*\,*\d*) *(.*))', self.product['medicinalProductPower'])
+        parentheses_groups = re.search(RegexPatterns.parentheses_regex.value, self.product['medicinalProductPower'])
         parentheses = parentheses_groups.group(1).replace('(', '').replace(')', '')
         power = parentheses_groups.group(3)
         if power == '': power = '1'
@@ -90,7 +91,13 @@ class MedicinalProductBuilder:
         return elements
 
     def extract_plus_separated_data(self) -> list:
-        return self.product['medicinalProductPower'].split(' + ')
+        if len(self.active_substances) == len(self.product['medicinalProductPower'].split(' + ')):
+            return self.product['medicinalProductPower'].split(' + ')
+        elif len(self.active_substances) == len(self.product['medicinalProductPower'].split('+')):
+            return self.product['medicinalProductPower'].split('+')
+        else:
+            print([self.product['medicinalProductPower']] * len(self.active_substances))
+            return [self.product['medicinalProductPower']] * len(self.active_substances)
 
     def change_decimal_separator(self, primary_pair, separator_to_change=',', new_sparator='.') -> str:
         if separator_to_change in primary_pair:
@@ -104,8 +111,7 @@ class MedicinalProductBuilder:
     def prepare_primary_pair_details(self, primary_pair) -> dict:
         primary_pair = primary_pair.replace('%', ' %').replace(' ', ' ').replace('–', '-')
         primary_pair = self.change_decimal_separator(primary_pair)
-        groups = re.search(r'^(\d[\d\ \.\-x\^]*)(([\w\.]*)[\w\+\ \(\)\.]*\/(([\d\.]*)? ?([\w]*))|([\w\.\%]*))?',
-                           primary_pair)
+        groups = re.search(RegexPatterns.primary_pair_regex.value, primary_pair)
         concentration = groups.group(1).replace(' ', '')
         if groups.group(7):
             unit = groups.group(7).replace(' ', '')
