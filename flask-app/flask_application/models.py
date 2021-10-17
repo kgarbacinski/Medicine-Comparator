@@ -1,5 +1,6 @@
-from flask_application import db, LOGIN_MANAGER
+from .main import db, LOGIN_MANAGER
 from sqlalchemy.orm import relationship
+import os
 
 
 class User(db.Model):
@@ -38,10 +39,20 @@ def register_user(new_user: User):
     db.session.commit()
 
 
-def update_token_status(token):
-    Token.query.filter_by(token=token).first()
-    token.is_used = True
+def update_token_status(token_id):
+    token_to_update = Token.query.get(token_id)
+    token_to_update.is_used = True
     db.session.commit()
+
+
+def add_tokens(tokens):
+    db.session.add_all([tokens])
+    db.session.commit()
+
+
+def token_generator():
+    token = Token(os.urandom(2), False)
+    add_token(token)
 
 
 @LOGIN_MANAGER.user_loader

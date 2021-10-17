@@ -59,13 +59,13 @@ class SignupView(MethodView):
             password = generate_password_hash(form.password.data, 'sha256')
             email = form.email.data
             token = Token.query.filter_by(token=form.token.data).first()
-            if token.is_used is False:
-                flash("Token alredy used, please try again with correct token")
+            if token is None or token.is_used is False:
+                flash("Invalid token, please try again")
                 return redirect(url_for('signup', form=form))
             else:
                 is_super_user = 1
                 user = User(username, password, email, is_super_user, token_id=token.token_id)
-                update_token_status(token)
+                update_token_status(token.token_id)
                 register_user(user)
                 flash("Your account has been created successfully")
                 return redirect(url_for('main_page', form=form))
