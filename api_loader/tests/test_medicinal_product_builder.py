@@ -2,54 +2,61 @@ from ..medicinal_product_builder import MedicinalProductBuilder
 
 
 class Tests:
-    product = {'id': '10174',
-               'count': '1',
-               'medicinalProductName': '0,9% Sodium Chloride-BRAUN',
-               'commonName': 'Natrii chloridum',
-               'medicinalProductPower': '9 mg/ml',
-               'pharmaceuticalFormName': 'Roztwór do infuzji',
-               'registryNumber': '08754',
-               'expirationDateString': 'Bezterminowe',
-               'subjectMedicinalProductName': 'B. Braun Melsungen AG',
-               'procedureTypeName': 'NAR',
-               'specimenType': 'Ludzki',
-               'activeSubstanceName': 'Natrii chloridum',
-               'atcCode': 'B05CB01',
-               'gracePeriod': '',
-               'characteristicFileName': True,
-               'leafletFileName': True,
-               'packageFileName': True,
-               'parallelImportLeafletFileName': False,
-               'parallelImportPackageMarkingFileName': False,
-               'parallelImportAdditionalDocumentOneFileName': False,
-               'parallelImportAdditionalDocumentTwoFileName': False,
-               'decisionsAttachment': False,
-               'evaluationReport': '-',
-               'reportSummary': '-',
-               'rmpSummary': '-',
-               'targetSpecies': '',
-               'packaging': '6 butelek 1000 ml\\n20 poj. 100 ml\\n10 poj. 1000 ml\\n10 butelek 100 ml\\n10 poj. 250 ml\\n10 poj. 500 ml\\n10 butelek 500 ml',
-               'distributor': '\\n\\n\\n\\n\\n\\n',
-               'euNumber': '\\n\\n\\n\\n\\n\\n',
-               'accessibilityCategory': 'Rp\\nRp\\nRp\\nRp\\nRp\\nRp\\nRp',
-               'gtin': '05909990875450\\n05909990336142\\n05909990875429\\n05909990875436\\n05909990875474\\n05909990875467\\n05909990875443',
-               'parallelPackaging': '',
-               'parallelDistributor': '',
-               'parallelEuNumber': '',
-               'parallelAccessibilityCategory': '',
-               'parallelGtin': '',
-               'deletedPackaging': '10 poj. 100 ml',
-               'deletedDistributor': '',
-               'deletedEuNumber': '',
-               'deletedAccessibilityCategory': 'LzRp',
-               'deletedGtin': '05909990875412'}
-    product = MedicinalProductBuilder(product)
 
-    parentheses_description = {'id': '205', 'count': '24', 'medicinalProductName': 'ABE', 'commonName': 'Acidum lacticum + Acidum salicylicum', 'medicinalProductPower': '(89 mg + 89 mg)/g', 'pharmaceuticalFormName': 'Płyn na skórę', 'registryNumber': '00409', 'expirationDateString': 'Bezterminowe', 'subjectMedicinalProductName': 'Grupa Inco S.A.', 'procedureTypeName': 'NAR', 'specimenType': 'Ludzki', 'activeSubstanceName': 'Acidum lacticum + Acidum salicylicum', 'atcCode': '', 'gracePeriod': '', 'characteristicFileName': True, 'leafletFileName': True, 'packageFileName': True, 'parallelImportLeafletFileName': False, 'parallelImportPackageMarkingFileName': False, 'parallelImportAdditionalDocumentOneFileName': False, 'parallelImportAdditionalDocumentTwoFileName': False, 'decisionsAttachment': False, 'targetSpecies': '', 'packaging': '1 op. 8 g', 'distributor': '', 'euNumber': '', 'accessibilityCategory': 'OTC', 'gtin': '05909990040919', 'parallelPackaging': '', 'parallelDistributor': '', 'parallelEuNumber': '', 'parallelAccessibilityCategory': '', 'parallelGtin': '', 'deletedPackaging': '30 op. 8 g', 'deletedDistributor': '', 'deletedEuNumber': '', 'deletedAccessibilityCategory': 'OTC', 'deletedGtin': '05909990625796'}
-    parentheses_product = MedicinalProductBuilder(parentheses_description)
+    @property
+    def product(self):
+        product = {'id': '10174',
+                   'count': '1',
+                   'medicinalProductName': '0,9% Sodium Chloride-BRAUN',
+                   'commonName': 'Natrii chloridum',
+                   'medicinalProductPower': '9 mg/ml',
+                   'pharmaceuticalFormName': 'Roztwór do infuzji',
+                   'registryNumber': '08754',
+                   'expirationDateString': 'Bezterminowe',
+                   'subjectMedicinalProductName': 'B. Braun Melsungen AG',
+                   'procedureTypeName': 'NAR',
+                   'specimenType': 'Ludzki',
+                   'activeSubstanceName': 'Natrii chloridum',
+                   'atcCode': 'B05CB01',
+                   'gracePeriod': '',
+                   'characteristicFileName': True,
+                   'leafletFileName': True,
+                   'packageFileName': True,
+                   'parallelImportLeafletFileName': False,
+                   'parallelImportPackageMarkingFileName': False,
+                   'parallelImportAdditionalDocumentOneFileName': False,
+                   'parallelImportAdditionalDocumentTwoFileName': False,
+                   'decisionsAttachment': False,
+                   'evaluationReport': '-',
+                   'reportSummary': '-',
+                   'rmpSummary': '-',
+                   'targetSpecies': '',
+                   'packaging': '6 butelek 1000 ml\\n20 poj. 100 ml\\n10 poj. 1000 ml\\n10 butelek 100 ml\\n10 poj. 250 ml\\n10 poj. 500 ml\\n10 butelek 500 ml',
+                   'distributor': '\\n\\n\\n\\n\\n\\n',
+                   'euNumber': '\\n\\n\\n\\n\\n\\n',
+                   'accessibilityCategory': 'Rp\\nRp\\nRp\\nRp\\nRp\\nRp\\nRp',
+                   'gtin': '05909990875450\\n05909990336142\\n05909990875429\\n05909990875436\\n05909990875474\\n05909990875467\\n05909990875443',
+                   'parallelPackaging': '',
+                   'parallelDistributor': '',
+                   'parallelEuNumber': '',
+                   'parallelAccessibilityCategory': '',
+                   'parallelGtin': '',
+                   'deletedPackaging': '10 poj. 100 ml',
+                   'deletedDistributor': '',
+                   'deletedEuNumber': '',
+                   'deletedAccessibilityCategory': 'LzRp',
+                   'deletedGtin': '05909990875412'}
+        return MedicinalProductBuilder(product)
 
-    plus_separated_description = {'id': '34249', 'count': '12', 'medicinalProductName': 'Abacavir + Lamivudine Accord', 'commonName': 'Abacavirum + Lamivudinum', 'medicinalProductPower': '600 mg + 300 mg', 'pharmaceuticalFormName': 'Tabletki powlekane', 'registryNumber': '23541', 'expirationDateString': '2021-11-15', 'subjectMedicinalProductName': 'Accord Healthcare Polska Sp. z o.o.', 'procedureTypeName': 'DCP', 'specimenType': 'Ludzki', 'activeSubstanceName': 'Abacaviri hydrochloridum + Lamivudinum', 'atcCode': 'J05AR02', 'gracePeriod': '', 'characteristicFileName': True, 'leafletFileName': True, 'packageFileName': True, 'parallelImportLeafletFileName': False, 'parallelImportPackageMarkingFileName': False, 'parallelImportAdditionalDocumentOneFileName': False, 'parallelImportAdditionalDocumentTwoFileName': False, 'decisionsAttachment': True, 'rmpSummary': 'StreszczenieRmp_34249_Iviverz.pdf', 'targetSpecies': '', 'packaging': '30 tabl.', 'distributor': '', 'euNumber': '', 'accessibilityCategory': 'Rpz', 'gtin': '05909991302498', 'parallelPackaging': '', 'parallelDistributor': '', 'parallelEuNumber': '', 'parallelAccessibilityCategory': '', 'parallelGtin': '', 'deletedPackaging': '', 'deletedDistributor': '', 'deletedEuNumber': '', 'deletedAccessibilityCategory': '', 'deletedGtin': ''}
-    plus_separated_product = MedicinalProductBuilder(plus_separated_description)
+    @property
+    def parentheses_product(self):
+        parentheses_description = {'id': '205', 'count': '24', 'medicinalProductName': 'ABE', 'commonName': 'Acidum lacticum + Acidum salicylicum', 'medicinalProductPower': '(89 mg + 89 mg)/g', 'pharmaceuticalFormName': 'Płyn na skórę', 'registryNumber': '00409', 'expirationDateString': 'Bezterminowe', 'subjectMedicinalProductName': 'Grupa Inco S.A.', 'procedureTypeName': 'NAR', 'specimenType': 'Ludzki', 'activeSubstanceName': 'Acidum lacticum + Acidum salicylicum', 'atcCode': '', 'gracePeriod': '', 'characteristicFileName': True, 'leafletFileName': True, 'packageFileName': True, 'parallelImportLeafletFileName': False, 'parallelImportPackageMarkingFileName': False, 'parallelImportAdditionalDocumentOneFileName': False, 'parallelImportAdditionalDocumentTwoFileName': False, 'decisionsAttachment': False, 'targetSpecies': '', 'packaging': '1 op. 8 g', 'distributor': '', 'euNumber': '', 'accessibilityCategory': 'OTC', 'gtin': '05909990040919', 'parallelPackaging': '', 'parallelDistributor': '', 'parallelEuNumber': '', 'parallelAccessibilityCategory': '', 'parallelGtin': '', 'deletedPackaging': '30 op. 8 g', 'deletedDistributor': '', 'deletedEuNumber': '', 'deletedAccessibilityCategory': 'OTC', 'deletedGtin': '05909990625796'}
+        return MedicinalProductBuilder(parentheses_description)
+
+    @property
+    def plus_separated_product(self):
+        plus_separated_description = {'id': '34249', 'count': '12', 'medicinalProductName': 'Abacavir + Lamivudine Accord', 'commonName': 'Abacavirum + Lamivudinum', 'medicinalProductPower': '600 mg + 300 mg', 'pharmaceuticalFormName': 'Tabletki powlekane', 'registryNumber': '23541', 'expirationDateString': '2021-11-15', 'subjectMedicinalProductName': 'Accord Healthcare Polska Sp. z o.o.', 'procedureTypeName': 'DCP', 'specimenType': 'Ludzki', 'activeSubstanceName': 'Abacaviri hydrochloridum + Lamivudinum', 'atcCode': 'J05AR02', 'gracePeriod': '', 'characteristicFileName': True, 'leafletFileName': True, 'packageFileName': True, 'parallelImportLeafletFileName': False, 'parallelImportPackageMarkingFileName': False, 'parallelImportAdditionalDocumentOneFileName': False, 'parallelImportAdditionalDocumentTwoFileName': False, 'decisionsAttachment': True, 'rmpSummary': 'StreszczenieRmp_34249_Iviverz.pdf', 'targetSpecies': '', 'packaging': '30 tabl.', 'distributor': '', 'euNumber': '', 'accessibilityCategory': 'Rpz', 'gtin': '05909991302498', 'parallelPackaging': '', 'parallelDistributor': '', 'parallelEuNumber': '', 'parallelAccessibilityCategory': '', 'parallelGtin': '', 'deletedPackaging': '', 'deletedDistributor': '', 'deletedEuNumber': '', 'deletedAccessibilityCategory': '', 'deletedGtin': ''}
+        return MedicinalProductBuilder(plus_separated_description)
 
     def test_get_ean(self):
         ean_test_list = [5909990875450,
