@@ -6,10 +6,12 @@ import requests
 
 
 class DatabaseUpdater:
+    def __init__(self):
+        self.db_path = 'models/medicine.db'
+        self.medicinal_products = self.__get_products()
 
-    db_path = 'models/medicine.db'
-    loader = MedicinalProductsBaseLoader()
-    medicinal_products = loader.get_medicinal_products()
+    def __get_products(self):
+        return MedicinalProductsBaseLoader().get_medicinal_products()
 
     def update_medicinal_products_base(self):
         for product in self.medicinal_products:
