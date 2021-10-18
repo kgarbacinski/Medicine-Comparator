@@ -46,13 +46,12 @@ def update_token_status(token_id):
 
 
 def add_tokens(tokens):
-    db.session.add_all([tokens])
+    db.session.add_all(tokens)
     db.session.commit()
 
 
-def token_generator():
-    token = Token(os.urandom(2), False)
-    add_token(token)
+def token_generator():pass
+
 
 
 @LOGIN_MANAGER.user_loader
