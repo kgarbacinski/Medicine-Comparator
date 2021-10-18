@@ -1,4 +1,3 @@
 .idea/
-flask-app/__pycache__
-flask-app/flask_application/__pycache__/main.cpython-38.pyc
-
+.flask-app/__pycache__/
+.flask-app/flask_application/__pycache__/main.cpython-38.pyc

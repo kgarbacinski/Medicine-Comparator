@@ -53,7 +53,6 @@ def add_tokens(tokens):
 def token_generator():pass
 
 
-
 @LOGIN_MANAGER.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
