@@ -21,7 +21,7 @@ class PDFReader:
                 pdf_to_text += '\n' + data
             return pdf_to_text
         return '6.1. Wykaz substancji pomocniczych' \
-               'Nie odczytano PDF-a' \
+               'Błąd odczytu danych z pliku PDF' \
                '6.2.  Niezgodności farmaceutyczne'
 
     def get_set_of_excipents(self, pdf_to_text):
@@ -38,7 +38,6 @@ class PDFReader:
             i = i.strip()
             try:
                 i = i.replace(re.search('^-\s*', i).group(), '')
-                print(i)
             except:
                 pass
 
@@ -70,7 +69,7 @@ class PDFReader:
         end = pdf_to_text.index(re.search('6.(.)+niezgodności(.)+(farmaceutyczne)*', pdf_to_text, re.IGNORECASE).group()) #1
         return [start, end, start_length]
 
-def main(url):
+def pdf_scrapper(url):
     scraper = PDFReader()
     file = scraper.get_page(url)
     pdf_to_text = scraper.get_whole_data(file)
