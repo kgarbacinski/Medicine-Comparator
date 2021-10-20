@@ -93,5 +93,5 @@ class DatabaseUpdater:
 
 
 medicinal_product_updater = DatabaseUpdater()
-# medicinal_product_updater.update_medicinal_products_base()
+medicinal_product_updater.update_medicinal_products_base()
 medicinal_product_updater.update_excipents_base()
