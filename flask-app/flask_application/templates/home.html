@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}<title>home</title>{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<p class="title">
+    Search
+</p>
+
+<div class="container">
+    <form method="POST">
+        <div class="field">
+            <label class="label is-small">Type medicine name or EAN to find substitute</label>
+            <input class="input" type="text" placeholder="EAN/NAME">
+            <div class="field">
+                <p class="control">
+                    <button type="submit" class="button is-link -is-medium">
+                        Search
+                    </button>
+                </p>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!--<div class="field has-addons">-->
+<!--    <form method="post"></form>-->
+<!--    <p class="control">-->
+<!--    </p>-->
+<!--    <p class="control is-expanded">-->
+<!--        <label class="label is-small">Type medicine name or EAN number to find substitute <label>-->
+<!--        <input class="input" type="text" placeholder="EAN/NAME">-->
+<!--  <div class="control">-->
+<!--    <a class="button is-info">-->
+<!--      Search-->
+<!--    </a>-->
+<!--    </p>-->
+<!--</div>-->
+
+
+{% endblock %}

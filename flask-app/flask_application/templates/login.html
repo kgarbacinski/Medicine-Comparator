@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{%block title%} <title>login</title> {% endblock %}
+{% block content %}
+
+<div class="container" style="top:-70px;">
+    <div class="columns is-centered">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="field">
+                {{ form.username.label(class_="label is-medium") }}
+                {{ form.username(class_="label is-primary is-medium") }}
+                <div class="control has-icons-left has-icons-right">
+                    <span class="icon is-medium is-left">
+                    <i class="fas fa-user"></i>
+                  </span>
+                </div>
+            </div>
+            <div class="field">
+                {{ form.password.label(class_="label is-medium") }}
+                {{ form.password(class_="label is-medium") }}
+            </div>
+              <div class="field">
+                    <div class="alert alert alert-warning alert-dismissible">
+                        <p class="control">{{ form.submit(class_="button is-link is-medium") }}
+                            <a class="button is-link is-medium" href="/">
+                                Back
+                            </a>
+                        </p>
+                    </div>
+              </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
