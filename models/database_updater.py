@@ -27,10 +27,10 @@ class DatabaseUpdater:
             medicines_id = db.get_medicine_by_id(product.id)
             if not medicines_id:
                 db.add_medicine_to_table(product.id,
-                                           product.name,
-                                           product.product_power_original,
-                                           product.pharmaceutical_form,
-                                           product.content_length)
+                                         product.name,
+                                         product.product_power_original,
+                                         product.pharmaceutical_form,
+                                         product.content_length)
 
     def add_active_substances(self, product):
         for substance in product.active_substances_data:
@@ -40,10 +40,13 @@ class DatabaseUpdater:
                 active_substance_id = db.get_active_substance_id_by_name(substance)
                 if not db.get_medicines_active_substances_id(product.id, active_substance_id):
                     db.add_to_table_medicines_active_substances(product.id, active_substance_id)
-                    medicines_active_substances_id = db.get_medicines_active_substances_id(product.id, active_substance_id)
+                    medicines_active_substances_id = db.get_medicines_active_substances_id(product.id,
+                                                                                           active_substance_id)
                     db.add_to_table_medicines_active_substances_details(medicines_active_substances_id,
-                                                                        product.active_substances_data[substance]['power'],
-                                                                        product.active_substances_data[substance]['unit'])
+                                                                        product.active_substances_data[substance][
+                                                                            'power'],
+                                                                        product.active_substances_data[substance][
+                                                                            'unit'])
 
     def update_ean_codes(self, product):
         with MedicineDatabase(self.db_path) as db:
@@ -88,6 +91,7 @@ class DatabaseUpdater:
         file = requests.get(url=url)
         return int(file.headers['Content-Length'])
 
+
 medicinal_product_updater = DatabaseUpdater()
 medicinal_product_updater.update_medicinal_products_base()
-# medicinal_product_updater.update_excipents_base()
+medicinal_product_updater.update_excipents_base()

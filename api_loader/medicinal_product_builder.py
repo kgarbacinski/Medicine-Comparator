@@ -7,11 +7,11 @@ class MedicinalProductBuilder:
     def __init__(self, product):
         self.product = product
         self.id = self.product['id']
-        self.name = self.product['medicinalProductName']  #
+        self.name = self.product['medicinalProductName']
         self.ean = self.get_ean()
         self.product_power_original = self.product['medicinalProductPower']
         self.content_length = 0
-        self.pharmaceutical_form = self.product['pharmaceuticalFormName']  #
+        self.pharmaceutical_form = self.product['pharmaceuticalFormName']
         self.active_substances = self.get_active_substances()
         self.active_substances_data = self.collect_active_substances_data()
 
@@ -32,12 +32,13 @@ class MedicinalProductBuilder:
         active_substances_list = []
         for substance in act_substances:
             if substance != '':
-                active_substances_list.append(substance)
+                active_substances_list.append(substance.strip().lower())
         return active_substances_list
 
     def collect_active_substances_data(self) -> dict:
         if len(self.active_substances) == 1:
-            return self.divide_concentrations_and_units(self.active_substances[0], self.product['medicinalProductPower'])
+            return self.divide_concentrations_and_units(self.active_substances[0],
+                                                        self.product['medicinalProductPower'])
         else:
             elements = self.divide_elements()
             active_substances = {}
@@ -50,45 +51,58 @@ class MedicinalProductBuilder:
 
     def divide_elements(self) -> list:
         if self.product['medicinalProductPower'].startswith('('):
-            return self.extract_parentheses_data()
+            return self.extract_brackets_data()
         return self.extract_plus_separated_data()
 
-    def extract_parentheses_data(self) -> list:
-        if not ')' in self.product['medicinalProductPower']:
-            self.product['medicinalProductPower'] = self.product['medicinalProductPower'].replace('/', ')/')
-        parentheses = self.get_parentheses_details()
+    def extract_brackets_data(self) -> list:
+        brackets = self.get_brackets_details()
 
-        if len(self.active_substances) == parentheses['parentheses'].count('+') + 1:
-            return self.get_primary_pairs(parentheses, '+')
-        elif len(self.active_substances) == parentheses['parentheses'].count(' + ') + 1:
-            return self.get_primary_pairs(parentheses, ' + ')
+        if len(self.active_substances) == brackets['brackets'].count('+') + 1:
+            return self.get_primary_pairs(brackets, '+')
+        elif len(self.active_substances) == brackets['brackets'].count(' + ') + 1:
+            return self.get_primary_pairs(brackets, ' + ')
         else:
             print(self.id, self.name)
 
-    def get_parentheses_details(self) -> dict:
-        parentheses_groups = re.search(RegexPatterns.parentheses_regex.value, self.product['medicinalProductPower'])
-        parentheses = parentheses_groups.group(1).replace('(', '').replace(')', '')
-        power = parentheses_groups.group(3)
+    def get_brackets_details(self) -> dict:
+        brackets, power, unit = self.__get_brackets_params()
+        return self.__validate_brackets_elems(brackets, power, unit)
+
+    def __get_validated_product_power(self) -> str:
+        if ')' not in self.product['medicinalProductPower']:
+            return self.product['medicinalProductPower'].replace('/', ')/')
+        return self.product['medicinalProductPower']
+
+    def __get_brackets_params(self) -> tuple:
+        brackets_groups = re.search(RegexPatterns.brackets_regex.value, self.__get_validated_product_power())
+        brackets = brackets_groups.group(1).replace('(', '').replace(')', '')
+        power = brackets_groups.group(3)
+        unit = brackets_groups.group(4)
+        return brackets, power, unit
+
+    def __validate_brackets_elems(self, brackets, power, unit) -> dict:
         if power == '': power = '1'
         power = float(power.replace(',', '.'))
-        unit = parentheses_groups.group(4)
-        return {'parentheses': parentheses, 'power': power, 'unit': unit}
+        return {'brackets': brackets, 'power': power, 'unit': unit}
 
-    def get_primary_pairs(self, parentheses, splitter) -> list:
-        parentheses_elements = parentheses['parentheses'].split(splitter)
-        elements = []
-        for i, element in enumerate(parentheses_elements):
+    def get_primary_pairs(self, brackets, splitter) -> list:
+        brackets_elements = brackets['brackets'].split(splitter)
+        return self.__get_primary_pairs(brackets_elements, brackets)
+
+    def __get_primary_pairs(self, brackets_elements, brackets) -> list:
+        primary_pairs = []
+        for i, element in enumerate(brackets_elements):
             if i < len(self.active_substances):
                 element = element.strip()
                 e = self.divide_concentrations_and_units(self.active_substances[i], element)
                 try:
-                    power = float(e[self.active_substances[i]]['power']) / parentheses['power']
-                    unit = f"{e[self.active_substances[i]]['unit']}/{parentheses['unit']}"
+                    power = float(e[self.active_substances[i]]['power']) / brackets['power']
+                    unit = f"{e[self.active_substances[i]]['unit']}/{brackets['unit']}"
                 except:
                     power = e[self.active_substances[i]]['power']
                     unit = e[self.active_substances[i]]['unit']
-                elements.append(f'{power} {unit.split(" ")[0]}')
-        return elements
+                primary_pairs.append(f'{power} {unit.split(" ")[0]}')
+        return primary_pairs
 
     def extract_plus_separated_data(self) -> list:
         if len(self.active_substances) == len(self.product['medicinalProductPower'].split(' + ')):
@@ -96,7 +110,6 @@ class MedicinalProductBuilder:
         elif len(self.active_substances) == len(self.product['medicinalProductPower'].split('+')):
             return self.product['medicinalProductPower'].split('+')
         else:
-            print([self.product['medicinalProductPower']] * len(self.active_substances))
             return [self.product['medicinalProductPower']] * len(self.active_substances)
 
     def change_decimal_separator(self, primary_pair, separator_to_change=',', new_sparator='.') -> str:
@@ -109,9 +122,10 @@ class MedicinalProductBuilder:
         return primary_pair
 
     def prepare_primary_pair_details(self, primary_pair) -> dict:
-        primary_pair = primary_pair.replace('%', ' %').replace(' ', ' ').replace('–', '-')
-        primary_pair = self.change_decimal_separator(primary_pair)
-        groups = re.search(RegexPatterns.primary_pair_regex.value, primary_pair)
+        groups = re.search(RegexPatterns.primary_pair_regex.value, self.__get_validated_primary_pair(primary_pair))
+        return self.__validate_primary_pair_elems(groups)
+
+    def __validate_primary_pair_elems(self, groups) -> dict:
         concentration = groups.group(1).replace(' ', '')
         if groups.group(7):
             unit = groups.group(7).replace(' ', '')
@@ -124,6 +138,11 @@ class MedicinalProductBuilder:
                 divider = '1'
             divider_unit = f'/{groups.group(6).strip()}'
         return {'concentration': concentration, 'divider': divider, 'unit': unit, 'divider_unit': divider_unit}
+
+    def __get_validated_primary_pair(self, primary_pair) -> str:
+        primary_pair = primary_pair.replace('%', ' %').replace(' ', ' ').replace('–', '-')
+        primary_pair = self.change_decimal_separator(primary_pair)
+        return primary_pair
 
     def divide_concentrations_and_units(self, substance, primary_pair) -> dict:
         concentrations_and_units = {}

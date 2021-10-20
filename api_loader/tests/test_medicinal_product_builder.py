@@ -49,9 +49,9 @@ class Tests:
         return MedicinalProductBuilder(product)
 
     @property
-    def parentheses_product(self):
-        parentheses_description = {'id': '205', 'count': '24', 'medicinalProductName': 'ABE', 'commonName': 'Acidum lacticum + Acidum salicylicum', 'medicinalProductPower': '(89 mg + 89 mg)/g', 'pharmaceuticalFormName': 'Płyn na skórę', 'registryNumber': '00409', 'expirationDateString': 'Bezterminowe', 'subjectMedicinalProductName': 'Grupa Inco S.A.', 'procedureTypeName': 'NAR', 'specimenType': 'Ludzki', 'activeSubstanceName': 'Acidum lacticum + Acidum salicylicum', 'atcCode': '', 'gracePeriod': '', 'characteristicFileName': True, 'leafletFileName': True, 'packageFileName': True, 'parallelImportLeafletFileName': False, 'parallelImportPackageMarkingFileName': False, 'parallelImportAdditionalDocumentOneFileName': False, 'parallelImportAdditionalDocumentTwoFileName': False, 'decisionsAttachment': False, 'targetSpecies': '', 'packaging': '1 op. 8 g', 'distributor': '', 'euNumber': '', 'accessibilityCategory': 'OTC', 'gtin': '05909990040919', 'parallelPackaging': '', 'parallelDistributor': '', 'parallelEuNumber': '', 'parallelAccessibilityCategory': '', 'parallelGtin': '', 'deletedPackaging': '30 op. 8 g', 'deletedDistributor': '', 'deletedEuNumber': '', 'deletedAccessibilityCategory': 'OTC', 'deletedGtin': '05909990625796'}
-        return MedicinalProductBuilder(parentheses_description)
+    def brackets_product(self):
+        brackets_description = {'id': '205', 'count': '24', 'medicinalProductName': 'ABE', 'commonName': 'Acidum lacticum + Acidum salicylicum', 'medicinalProductPower': '(89 mg + 89 mg)/g', 'pharmaceuticalFormName': 'Płyn na skórę', 'registryNumber': '00409', 'expirationDateString': 'Bezterminowe', 'subjectMedicinalProductName': 'Grupa Inco S.A.', 'procedureTypeName': 'NAR', 'specimenType': 'Ludzki', 'activeSubstanceName': 'Acidum lacticum + Acidum salicylicum', 'atcCode': '', 'gracePeriod': '', 'characteristicFileName': True, 'leafletFileName': True, 'packageFileName': True, 'parallelImportLeafletFileName': False, 'parallelImportPackageMarkingFileName': False, 'parallelImportAdditionalDocumentOneFileName': False, 'parallelImportAdditionalDocumentTwoFileName': False, 'decisionsAttachment': False, 'targetSpecies': '', 'packaging': '1 op. 8 g', 'distributor': '', 'euNumber': '', 'accessibilityCategory': 'OTC', 'gtin': '05909990040919', 'parallelPackaging': '', 'parallelDistributor': '', 'parallelEuNumber': '', 'parallelAccessibilityCategory': '', 'parallelGtin': '', 'deletedPackaging': '30 op. 8 g', 'deletedDistributor': '', 'deletedEuNumber': '', 'deletedAccessibilityCategory': 'OTC', 'deletedGtin': '05909990625796'}
+        return MedicinalProductBuilder(brackets_description)
 
     @property
     def plus_separated_product(self):
@@ -69,27 +69,27 @@ class Tests:
         assert ean_test_list == self.product.get_ean()
 
     def test_get_active_substances(self):
-        active_substance_test = ['Natrii chloridum']
+        active_substance_test = ['natrii chloridum']
         assert self.product.get_active_substances() == active_substance_test
 
     def test_collect_active_substances_data(self):
-        active_substances_data_test = {'Natrii chloridum': {'power': 9.0, 'unit': 'mg/ml'}}
+        active_substances_data_test = {'natrii chloridum': {'power': 9.0, 'unit': 'mg/ml'}}
         assert active_substances_data_test == self.product.collect_active_substances_data()
 
-    def test_get_parentheses_details(self):
-        parentheses = {'parentheses': '89 mg + 89 mg', 'power': 1.0, 'unit': 'g'}
-        assert parentheses == self.parentheses_product.get_parentheses_details()
+    def test_get_brackets_details(self):
+        brackets = {'brackets': '89 mg + 89 mg', 'power': 1.0, 'unit': 'g'}
+        assert brackets == self.brackets_product.get_brackets_details()
 
     def test_get_primary_pairs(self):
-        parentheses = {'parentheses': '89 mg + 89 mg', 'power': 1.0, 'unit': 'g'}
+        brackets = {'brackets': '89 mg + 89 mg', 'power': 1.0, 'unit': 'g'}
         primary_pairs = ['89.0 mg/g', '89.0 mg/g']
-        assert primary_pairs == self.parentheses_product.get_primary_pairs(parentheses, '+')
+        assert primary_pairs == self.brackets_product.get_primary_pairs(brackets, '+')
 
-    def test_divide_parentheses_elements(self):
+    def test_divide_brackets_elements(self):
         elements = ['89.0 mg/g', '89.0 mg/g']
-        assert self.parentheses_product.divide_elements() == elements
+        assert self.brackets_product.divide_elements() == elements
 
-    def test_divide_non_parentheses_elements(self):
+    def test_divide_non_brackets_elements(self):
         elements = ['600 mg', '300 mg']
         assert self.plus_separated_product.divide_elements() == elements
 
