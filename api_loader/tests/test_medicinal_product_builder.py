@@ -69,11 +69,11 @@ class Tests:
         assert ean_test_list == self.product.get_ean()
 
     def test_get_active_substances(self):
-        active_substance_test = ['Natrii chloridum']
+        active_substance_test = ['natrii chloridum']
         assert self.product.get_active_substances() == active_substance_test
 
     def test_collect_active_substances_data(self):
-        active_substances_data_test = {'Natrii chloridum': {'power': 9.0, 'unit': 'mg/ml'}}
+        active_substances_data_test = {'natrii chloridum': {'power': 9.0, 'unit': 'mg/ml'}}
         assert active_substances_data_test == self.product.collect_active_substances_data()
 
     def test_get_brackets_details(self):
