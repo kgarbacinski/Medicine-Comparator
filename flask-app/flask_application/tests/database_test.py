@@ -7,3 +7,5 @@ class TestDatabaseFunctionality:
     def test_adding_to_db(self):
         result = []
         for x in range(10): pass
+
+
