@@ -1,6 +1,7 @@
+import os
+
 from .main import db, LOGIN_MANAGER
 from sqlalchemy.orm import relationship
-import os
 
 
 class User(db.Model):
@@ -50,7 +51,12 @@ def add_tokens(tokens):
     db.session.commit()
 
 
-def token_generator():pass
+def token_generator():
+    tokens_used = Token.query(Token.is_used).count()
+    if tokens_used % 10 == 0:
+        for x in range(10):
+            token = Token(os.urandom(2), False)
+        add_tokens(token)
 
 
 @LOGIN_MANAGER.user_loader
