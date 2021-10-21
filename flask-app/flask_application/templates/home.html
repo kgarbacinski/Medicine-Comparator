@@ -8,21 +8,26 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
-<p class="title">
+<p class="title" style="margin-left: 35px;">
     Search
 </p>
 
 <div class="container">
-    <form method="POST">
+    <form action="/search/" method="POST">
+        {{ form.hidden_tag() }}
         <div class="field">
-            <label class="label is-small">Type medicine name or EAN to find substitute</label>
-            <input class="input" type="text" placeholder="EAN/NAME">
+            {{ form.medicine_to_search.label(class_= "label is-medium") }}
+            <div class="field is-horizontal">
+            {{ form.medicine_to_search(class_= "input") }}
+            </div>
             <div class="field">
-                <p class="control">
-                    <button type="submit" class="button is-link -is-medium">
-                        Search
-                    </button>
-                </p>
+                <div class="alert alert alert-warning alert-dismissible">
+                    <p class="control">{{ form.search(class_="button is-link is-medium") }}
+                        <a class="button is-link" href="/table">
+                            Test Search
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     </form>

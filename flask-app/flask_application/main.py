@@ -19,10 +19,11 @@ def create_app():
     LOGIN_MANAGER.init_app(app)
     LOGIN_MANAGER.login_message = "You're logged in succsesfully"
 
-    from .views import MainPage, SignupView, LoginView
+    from .views import MainPage, SignupView, LoginView, SearchView
     app.add_url_rule('/', view_func=MainPage.as_view('main_page', template_name='home.html'))
     app.add_url_rule('/signup', view_func=SignupView.as_view('signup', template_name='signup.html'))
     app.add_url_rule('/login', view_func=LoginView.as_view('login', template_name='login.html'))
+    app.add_url_rule('/table', view_func=SearchView.as_view('table', template_name='table.html'))
     create_database(app)
     return app
 

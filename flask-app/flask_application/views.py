@@ -2,24 +2,8 @@ from flask import render_template, flash, redirect, url_for
 from flask.views import MethodView
 from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import Length, InputRequired
-from flask_wtf import FlaskForm
 from .models import User, Token, register_user, update_token_status
-
-
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[InputRequired(), Length(min=5, max=20)])
-    password = StringField('Password', validators=[InputRequired(), Length(min=5, max=20)])
-    submit = SubmitField('Login')
-
-
-class RegisterForm(FlaskForm):
-    username = StringField('Username', validators=[InputRequired(), Length(min=5, max=20)])
-    password = PasswordField('Password', validators=[InputRequired(), Length(min=5, max=20)])
-    email = StringField('Email', validators=[InputRequired(), Length(max=50)])
-    token = StringField('Token', validators=[InputRequired(), Length(max=15)])
-    submit = SubmitField('Register')
+from .forms.forms import LoginForm, RegisterForm, SearchForm, EditForm
 
 
 class MainPage(MethodView):
@@ -28,7 +12,8 @@ class MainPage(MethodView):
         self.template_name = template_name
 
     def dispatch_request(self):
-        return render_template(self.template_name)
+        form = SearchForm()
+        return render_template(self.template_name, form=form)
 
 
 class LoginView(MethodView):
@@ -73,4 +58,19 @@ class SignupView(MethodView):
 
     def get(self):
         form = RegisterForm()
+        return render_template(self.template_name, form=form)
+
+
+class SearchView(MethodView):
+    def __init__(self, template_name):
+        self.template_name = template_name
+
+
+    def post(self):
+        form = SearchForm()
+        if form.validate_on_submit():
+            medicine = form.medicine_to_search.data
+
+    def get(self):
+        form = EditForm()
         return render_template(self.template_name, form=form)

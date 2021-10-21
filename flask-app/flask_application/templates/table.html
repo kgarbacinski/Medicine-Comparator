@@ -1,0 +1,30 @@
+{% extends 'base.html'%}
+
+{% block title%}<title>result</title> {% endblock %}
+
+{% block content %}
+<table class="table" style="top:-70px;">
+  <thead>
+    <tr>
+      <th><abbr title="medicine">Medicine name </abbr></th>
+      <th><abbr title="active_substance">Active Substance</abbr></th>
+      <th><abbr title="excipents">Excipents</abbr></th>
+      <th><abbr title="descirption">Description</abbr></th>
+      <th><abbr title="concentration">Concentration</abbr></th>
+      <th><abbr title="ean">EAN</abbr></th>
+    </tr>
+    <tbody>
+        <tr>
+            <th>Amlopin</th>
+            <th>Amlopidine</th>
+            <th>Excipents for amlopin</th>
+            <th>Description of medicine</th>
+            <th>5 mg</th>
+            <th>3450239492042</th>
+            <th>{{ form.edit_medicine(class_="button is-warning") }}</th>
+
+        </tr>
+
+</tbody>
+</table>
+    {% endblock %}
