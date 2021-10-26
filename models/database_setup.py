@@ -67,6 +67,18 @@ class MedicineDatabase:
                     ); '''
         self.con.execute(ean_table)
 
+    def create_tmp_table(self):
+        tmp_table = '''CREATE TABLE IF NOT EXISTS tmp(
+                    MedicineID INTEGER,
+                    Name TEXT,
+                    Description TEXT,
+                    Form TEXT,
+                    ActiveSubstanceID INTEGER,
+                    Concentration TEXT,
+                    Unit TEXT
+                    );'''
+        self.con.execute(tmp_table)
+
     def add_medicine_to_table(self, medicine_id, name, power_descr, form, content_length):
         medicine = "INSERT INTO Medicines(medicineId, name, PowerDescryption, form, ContentLength) VALUES (?, ?, ?, ?, ?)"
         self.con.execute(medicine, (medicine_id, name, power_descr, form, content_length))
@@ -124,6 +136,68 @@ class MedicineDatabase:
         query = "SELECT ID FROM MedicinesActiveSubstances WHERE MedicineID = (?) AND ActiveSubstanceId = (?)"
         return self.con.execute(query, (medicine_id, str(active_substance_id[0]))).fetchone()
 
+    def get_active_substances_details(self, medicine_id):
+        query = """SELECT ActiveSubstances.Name, MedicinesActiveSubstancesDetails.Concentration, MedicinesActiveSubstancesDetails.Unit
+                    FROM ActiveSubstances, MedicinesActiveSubstances, MedicinesActiveSubstancesDetails, Medicines
+                    WHERE Medicines.MedicineID = MedicinesActiveSubstances.MedicineID
+                    AND MedicinesActiveSubstances.ActiveSubstanceID = ActiveSubstances.ActiveSubstanceID
+                    AND MedicinesActiveSubstances.ID = MedicinesActiveSubstancesDetails.ID
+                    AND Medicines.MedicineID = (?)"""
+        return self.con.execute(query, [str(medicine_id)])
+
+    def get_medicine_equivalents(self):
+        query = f"""
+                SELECT
+                TAB1.MedicineID 
+                ,MED.Name 
+                ,MED.PowerDescryption 
+                ,MED.Form 
+                ,MAS.ActiveSubstanceID 
+                ,EAN.EanNumber 
+                ,DET.Concentration 
+                ,DET.Unit 
+                ,ACT.Name 
+                FROM 
+                    (
+                    SELECT MedicineID FROM 	
+                        (
+                        SELECT X.*, U.cnt 
+                        FROM MedicinesActiveSubstances X, MedicinesActiveSubstancesDetails Z
+                        LEFT JOIN (		SELECT Y.MedicineID, Count(Y.ActiveSubstanceID) cnt	
+                        FROM MedicinesActiveSubstances Y GROUP BY Y.medicineID		) U 
+                        ON U.MedicineID = X.MedicineID
+                        WHERE X.ID = Z.ID 
+                        AND X.ActiveSubstanceID in (SELECT tmp.ActiveSubstanceID FROM tmp)
+                        AND Z.Concentration in 
+                            (SELECT tmp.Concentration
+                             FROM tmp 
+                             WHERE Z.ID = X.ID AND X.ActiveSubstanceID = tmp.ActiveSubstanceID)
+                        AND Z.Unit in 
+                        (SELECT tmp.Unit FROM tmp WHERE Z.ID = X.ID AND X.ActiveSubstanceID = tmp.ActiveSubstanceID)
+                        ) MEDID 
+                    WHERE cnt = (SELECT count(1) FROM tmp)
+                    GROUP BY MEDID.MedicineID HAVING count(cnt)= (SELECT count(1) FROM tmp)
+                    ) TAB1
+                LEFT JOIN Medicines MED on MED.MedicineID = TAB1.MedicineID 
+                LEFT JOIN MedicinesActiveSubstances MAS on MAS.MedicineID = TAB1.MedicineID 
+                LEFT JOIN EanTable EAN on EAN.MedicineID = TAB1.MedicineID 
+                LEFT JOIN MedicinesActiveSubstancesDetails DET on DET.ID = MAS.ID 
+                LEFT JOIN ActiveSubstances ACT on ACT.ActiveSubstanceID = MAS.ActiveSubstanceID
+                WHERE TAB1.MedicineID <> (SELECT tmp.MedicineID FROM tmp)
+                GROUP BY TAB1.MedicineID
+                """
+        return self.con.execute(query)
+
+    def get_medicinal_product_excipents(self, medicine_id):
+        query = f"""
+                SELECT Excipents.Name
+                FROM Medicines, Excipents, MedicinesExcipents
+                WHERE Medicines.MedicineID = MedicinesExcipents.MedicineID
+                AND MedicinesExcipents.ExcipentID = Excipents.ExcipentID
+                AND Medicines.MedicineID = {medicine_id}
+                """
+        return self.con.execute(query)
+
     def set_content_length(self, medicine_id, content_length):
         query = "UPDATE Medicines SET ContentLength = (?) WHERE MedicineID = (?)"
         self.con.execute(query, (content_length, medicine_id))
@@ -135,6 +209,22 @@ class MedicineDatabase:
     def delete_ean_codes_from_table(self, medicine_id):
         query = "DELETE FROM EanTable WHERE MedicineID = (?)"
         self.con.execute(query, [str(medicine_id)])
+
+    def delete_from_tmp(self):
+        query = 'DELETE FROM tmp;'
+        self.con.execute(query)
+
+    def insert_into_tmp(self, medicine_id):
+        query = f'''INSERT INTO tmp 
+                SELECT MED.MedicineID, MED.Name, MED.PowerDescryption, MED.Form, 
+                    MAS.ActiveSubstanceID, DET.Concentration, DET.Unit
+                FROM MedicinesActiveSubstances MAS, MedicinesActiveSubstancesDetails DET
+                INNER JOIN Medicines MED on MAS.MedicineID = MED.MedicineID
+                INNER JOIN MedicinesActiveSubstances on MAS.ID = DET.ID
+                WHERE MED.MedicineID = (?)
+                GROUP BY MAS.ActiveSubstanceID'''
+        self.con.execute(query, [str(medicine_id)])
+
 
     def __enter__(self):
         return self
@@ -156,3 +246,4 @@ with MedicineDatabase('models/medicine.db') as db:
     db.create_medicines_active_substances_table()
     db.create_medicines_active_substances_details_table()
     db.create_medicines_excipents_table()
+    db.create_tmp_table()
