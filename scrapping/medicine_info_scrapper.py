@@ -40,6 +40,10 @@ class PDFReader:
                 i = i.replace(re.search('^-\s*', i).group(), '')
             except:
                 pass
+            try:
+                i = i.replace(re.search('\.$', i).group(), '')
+            except:
+                pass
 
             if len(i) > 2:
                 final_list_of_excipents.append(i)
