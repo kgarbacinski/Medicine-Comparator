@@ -10,10 +10,10 @@ class MedicinalProduct:
         self.description = db_data[2]
         self.form = db_data[3]
 
-    def get_excipents(self):
+    def get_excipents(self) -> list:
         return self.__get_validated_excipents()
 
-    def __get_validated_excipents(self):
+    def __get_validated_excipents(self) -> list:
         excipents_getter = ExcipentsGetter()
         if excipents_getter.get_excipents(self.id):
             return excipents_getter.get_excipents(self.id)
