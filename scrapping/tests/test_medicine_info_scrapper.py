@@ -10,7 +10,7 @@ def test_coma_separated_excipients_pdf_scrapper():
     url = 'https://rejestrymedyczne.ezdrowie.gov.pl/api/rpl/medicinal-products/786/characteristic'
     excipients_test_set = {'celuloza sproszkowana', 'skrobia kukurydziana',
                            'skład otoczki: kopolimer kwasu metakrylowego i akrylan metylu', 'polisorbat 80',
-                           'sodu laurylosiarczan', 'talk', 'cytrynian trójetylowy.'}
+                           'sodu laurylosiarczan', 'talk', 'cytrynian trójetylowy'}
     scrapped_excipients = pdf_scrapper(url)
     assert excipients_test_set == scrapped_excipients
 
