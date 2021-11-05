@@ -19,7 +19,6 @@
     $(document).ready(function(){
         $("#search_input").on("input",function(e){
 			var search_input = $("#search_input").val();
-			console.log(search_input);
 			if (search_input != ''){
 				$.ajax({
 					method:"post",
@@ -30,7 +29,6 @@
 						$.each(res,function(index,value){
 							data += '<option>' + value.Name + '</option>';
 						});
-						console.log(data);
 						$("#medicines").html(data);
 					}
 				});

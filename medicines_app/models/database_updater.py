@@ -1,13 +1,13 @@
-from api_loader.medicinal_products_base_loader import MedicinalProductsBaseLoader
-from api_loader.medicinal_product_builder import MedicinalProductBuilder
-from package.scrapping import pdf_scrapper
-from package.models import MedicineDatabase
+from medicines_app.api_loader.medicinal_products_base_loader import MedicinalProductsBaseLoader
+from medicines_app.api_loader.medicinal_product_builder import MedicinalProductBuilder
+from medicines_app.scrapping.medicine_info_scrapper import pdf_scrapper
+from medicines_app.models.database_setup import MedicineDatabase
 import requests
 
 
 class DatabaseUpdater:
     def __init__(self):
-        self.db_path = 'models/medicine.db'
+        self.db_path = 'medicines_app/models/medicine.db'
         self.medicinal_products = self.__get_products()
 
     def __get_products(self):
@@ -93,5 +93,5 @@ class DatabaseUpdater:
 
 
 medicinal_product_updater = DatabaseUpdater()
-medicinal_product_updater.update_medicinal_products_base()
-# medicinal_product_updater.update_excipents_base()
+# medicinal_product_updater.update_medicinal_products_base()
+medicinal_product_updater.update_excipents_base()

@@ -1,21 +1,23 @@
 from flask import Blueprint, request, jsonify, render_template
 from medicines_app.models.database_setup import MedicineDatabase
+from .medicinal_product import MedicinalProduct
 from .models_ import MedicinesSchema
+import json
 
-get_reference_drug_blueprint = Blueprint('get_reference_drug', __name__)
+get_equivalents_blueprint = Blueprint('get_reference_drug', __name__)
 livesearch_blueprint = Blueprint('livesearch', __name__)
 index_blueprint = Blueprint('search_2', __name__)
 
-reference_drug_schema = MedicinesSchema()
+medicine_schema = MedicinesSchema(many=True)
 
 
-@get_reference_drug_blueprint.route('/equivalents', methods=['GET'])
-def get_reference_drug() -> str:
+@get_equivalents_blueprint.route('/equivalents', methods=['GET'])
+def get_equivalents() -> dict:
     name = request.json['name']
     with MedicineDatabase('medicines_app/models/medicine.db') as db:
-        found_drug = db.get_medicine_id_by_name(name)
-        print(found_drug)
-    return reference_drug_schema.jsonify(found_drug)
+        found_drug_id = db.get_medicine_id_by_name(name)[0]
+        equivs = MedicinalProduct(found_drug_id).get_equivalents()
+    return medicine_schema.jsonify(equivs)
 
 @index_blueprint.route('/')
 def index():
@@ -24,7 +26,6 @@ def index():
 @livesearch_blueprint.route('/livesearch',methods=['GET', 'POST'])
 def live_search():
     search_box = request.form.get("text")
-    print(search_box)
     with MedicineDatabase('medicines_app/models/medicine.db') as db:
         medicines = db.get_medicines_by_name_like(search_box)
     result = {}

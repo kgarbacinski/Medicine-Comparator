@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:\Users\Filip\PycharmProjects\team-0\models\medicine — kopia JEREK.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1764"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:mainMedicines"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="ActiveSubstances" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="132"/><column index="2" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Medicines" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="78"/><column index="2" value="290"/><column index="3" value="300"/><column index="4" value="300"/><column index="5" value="105"/></column_widths><filter_values><column index="2" value="co-pres"/></filter_values><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="tmp" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="78"/><column index="2" value="76"/><column index="3" value="117"/><column index="4" value="132"/><column index="6" value="40"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="insert_into_tmp.sql">DELETE FROM tmp;
+insert into tmp 
+select MED.MedicineID, MED.Name, MED.Form, MAS.ActiveSubstanceID, DET.Concentration, DET.Unit
+from MedicinesActiveSubstances MAS, MedicinesActiveSubstancesDetails DET
+inner join Medicines MED on MAS.MedicineID = MED.MedicineID
+INNER JOIN MedicinesActiveSubstances on MAS.ID = DET.ID
+where 
+	MED.MedicineID = 21816
+GROUP BY MAS.ActiveSubstanceID</sql><sql name="create_table_tmp.sql">create table tmp
+	(
+	MedicineID INTEGER
+	,Name TEXT
+	,Form TEXT
+	,ActiveSubstanceID INTEGER
+	,Concentration TEXT
+	,Unit TEXT
+	)</sql><sql name="SELECT_Jerka_po_poprawkach_jego_i_moich.sql">SELECT
+	TAB1.MedicineID 
+	,MED.Name 
+	,MED.PowerDescryption 
+	,MED.Form 
+	,MAS.ActiveSubstanceID 
+	,EAN.EanNumber 
+	,DET.Concentration 
+	,DET.Unit 
+	,ACT.Name 
+FROM 
+	(
+		SELECT MedicineID FROM 	
+			(
+				SELECT X.*, U.cnt 
+				FROM MedicinesActiveSubstances X, MedicinesActiveSubstancesDetails Z
+				LEFT JOIN (		SELECT Y.MedicineID, Count(Y.ActiveSubstanceID) cnt	
+								FROM MedicinesActiveSubstances Y GROUP BY Y.medicineID		) U 
+								ON U.MedicineID = X.MedicineID
+				WHERE X.ID = Z.ID 
+				AND X.ActiveSubstanceID in (SELECT tmp.ActiveSubstanceID FROM tmp)
+				AND Z.Concentration in (SELECT tmp.Concentration FROM tmp WHERE Z.ID = X.ID AND X.ActiveSubstanceID = tmp.ActiveSubstanceID)
+				AND Z.Unit in (SELECT tmp.Unit FROM tmp WHERE Z.ID = X.ID AND X.ActiveSubstanceID = tmp.ActiveSubstanceID)
+
+			) MEDID 
+		WHERE cnt = (SELECT count(1) FROM tmp)
+		GROUP BY MEDID.MedicineID HAVING count(cnt)= (SELECT count(1) FROM tmp)
+	) TAB1
+LEFT JOIN Medicines MED on MED.MedicineID = TAB1.MedicineID 
+LEFT JOIN MedicinesActiveSubstances MAS on MAS.MedicineID = TAB1.MedicineID 
+LEFT JOIN EanTable EAN on EAN.MedicineID = TAB1.MedicineID 
+LEFT JOIN MedicinesActiveSubstancesDetails DET on DET.ID = MAS.ID 
+LEFT JOIN ActiveSubstances ACT on ACT.ActiveSubstanceID = MAS.ActiveSubstanceID
+GROUP BY TAB1.MedicineID</sql><sql name="select medicines.sql">select Medicines.MedicineID, Medicines.Name, Medicines.Form, Medicines.PowerDescryption,
+ActiveSubstances.Name,
+MedicinesActiveSubstancesDetails.Concentration, MedicinesActiveSubstancesDetails.Unit
+from Medicines, ActiveSubstances, MedicinesActiveSubstancesDetails, MedicinesActiveSubstances
+WHERE (ActiveSubstances.ActiveSubstanceID = MedicinesActiveSubstances.ActiveSubstanceID
+and MedicinesActiveSubstancesDetails.id = MedicinesActiveSubstances.ID
+and Medicines.MedicineID = MedicinesActiveSubstances.MedicineID)
+and ActiveSubstances.ActiveSubstanceID in
+				(
+				SELECT ActiveSubstances.ActiveSubstanceID
+				FROM Medicines, MedicinesActiveSubstances, ActiveSubstances
+				WHERE Medicines.MedicineID = MedicinesActiveSubstances.MedicineID
+				AND ActiveSubstances.ActiveSubstanceID = MedicinesActiveSubstances.ActiveSubstanceID
+				AND Medicines.MedicineID = 20090				
+				)
+AND MedicinesActiveSubstancesDetails.Concentration in 
+				(
+				SELECT MedicinesActiveSubstancesDetails.Concentration
+				FROM Medicines, MedicinesActiveSubstances, MedicinesActiveSubstancesDetails
+				WHERE Medicines.MedicineID = MedicinesActiveSubstances.MedicineID
+				AND MedicinesActiveSubstances.ID = MedicinesActiveSubstancesDetails.ID
+				AND Medicines.MedicineID = 20090
+				)
+				
+AND MedicinesActiveSubstancesDetails.Unit in 
+				(
+				SELECT MedicinesActiveSubstancesDetails.Unit
+				FROM Medicines, MedicinesActiveSubstances, MedicinesActiveSubstancesDetails
+				WHERE Medicines.MedicineID = MedicinesActiveSubstances.MedicineID
+				AND MedicinesActiveSubstances.ID = MedicinesActiveSubstancesDetails.ID
+				AND Medicines.MedicineID = 20090
+				)
+group by Medicines.MedicineID HAVING COUNT(Medicines.MedicineID) =
+            (
+            SELECT count(Medicines.MedicineID)
+            FROM Medicines, MedicinesActiveSubstances, ActiveSubstances
+            WHERE Medicines.MedicineID = MedicinesActiveSubstances.MedicineID
+            AND ActiveSubstances.ActiveSubstanceID = MedicinesActiveSubstances.ActiveSubstanceID
+            AND Medicines.MedicineID = 24246
+            )
+			
+ORDER by Medicines.MedicineID</sql><sql name="SQL 5">SELECT count(Medicines.MedicineID)
+FROM Medicines, MedicinesActiveSubstances, ActiveSubstances
+WHERE Medicines.MedicineID = MedicinesActiveSubstances.MedicineID
+AND ActiveSubstances.ActiveSubstanceID = MedicinesActiveSubstances.ActiveSubstanceID
+AND Medicines.MedicineID = 24246
+</sql><current_tab id="2"/></tab_sql></sqlb_project>
