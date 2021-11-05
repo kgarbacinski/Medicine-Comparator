@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, render_template
 from medicines_app.models.database_setup import MedicineDatabase
 from .medicinal_product import MedicinalProduct
 from .models_ import MedicinesSchema
-import json
 
 get_equivalents_blueprint = Blueprint('get_reference_drug', __name__)
 livesearch_blueprint = Blueprint('livesearch', __name__)
