@@ -1,7 +1,7 @@
 from api_loader.medicinal_products_base_loader import MedicinalProductsBaseLoader
 from api_loader.medicinal_product_builder import MedicinalProductBuilder
-from scrapping.medicine_info_scrapper import pdf_scrapper
-from models.database_setup import MedicineDatabase
+from package.scrapping import pdf_scrapper
+from package.models import MedicineDatabase
 import requests
 
 
@@ -28,7 +28,7 @@ class DatabaseUpdater:
             if not medicines_id:
                 db.add_medicine_to_table(product.id,
                                          product.name,
-                                         product.product_power_original,
+                                         # product.product_power_original,
                                          product.pharmaceutical_form,
                                          product.content_length)
 
@@ -94,4 +94,4 @@ class DatabaseUpdater:
 
 medicinal_product_updater = DatabaseUpdater()
 medicinal_product_updater.update_medicinal_products_base()
-medicinal_product_updater.update_excipents_base()
+# medicinal_product_updater.update_excipents_base()

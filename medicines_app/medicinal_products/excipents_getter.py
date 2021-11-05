@@ -1,4 +1,4 @@
-from models.database_setup import MedicineDatabase
+from package.models import MedicineDatabase
 
 class ExcipentsGetter:
 

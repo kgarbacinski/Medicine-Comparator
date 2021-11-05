@@ -7,13 +7,18 @@ class MedicinalProductBuilder:
     def __init__(self, product):
         self.product = product
         self.id = self.product['id']
-        self.name = self.product['medicinalProductName']
+        self.name = self.get_name()
         self.ean = self.get_ean()
-        self.product_power_original = self.product['medicinalProductPower']
+        # self.product_power_original = self.product['medicinalProductPower']
         self.content_length = 0
         self.pharmaceutical_form = self.product['pharmaceuticalFormName']
         self.active_substances = self.get_active_substances()
         self.active_substances_data = self.collect_active_substances_data()
+
+    def get_name(self):
+        if self.product['medicinalProductPower'] in self.product['medicinalProductName']:
+            return self.product['medicinalProductName']
+        return f"{self.product['medicinalProductName']} {self.product['medicinalProductPower']}"
 
     def get_ean(self) -> list:
         gtins_codes = self.product['gtin'].split('\\n')

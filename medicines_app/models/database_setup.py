@@ -9,11 +9,21 @@ class MedicineDatabase:
         medicine_table = '''CREATE TABLE IF NOT EXISTS Medicines(
                             MedicineID INTEGER PRIMARY KEY,
                             Name TEXT NOT NULL,
-                            PowerDescryption TEXT,
                             Form TEXT NOT NULL,
                             ContentLength INTEGER NOT NULL
                             ); '''
         self.con.execute(medicine_table)
+
+    ### 1st version ###
+    # def create_medicine_table(self):
+    #     medicine_table = '''CREATE TABLE IF NOT EXISTS Medicines(
+    #                         MedicineID INTEGER PRIMARY KEY,
+    #                         Name TEXT NOT NULL,
+    #                         PowerDescription TEXT,
+    #                         Form TEXT NOT NULL,
+    #                         ContentLength INTEGER NOT NULL
+    #                         ); '''
+    #     self.con.execute(medicine_table)
 
     def create_excipents_table(self):
         excipents_table = '''CREATE TABLE IF NOT EXISTS Excipents (
@@ -79,9 +89,14 @@ class MedicineDatabase:
                     );'''
         self.con.execute(tmp_table)
 
-    def add_medicine_to_table(self, medicine_id, name, power_descr, form, content_length):
-        medicine = "INSERT INTO Medicines(medicineId, name, PowerDescryption, form, ContentLength) VALUES (?, ?, ?, ?, ?)"
-        self.con.execute(medicine, (medicine_id, name, power_descr, form, content_length))
+    def add_medicine_to_table(self, medicine_id, name, form, content_length):
+        medicine = "INSERT INTO Medicines(medicineId, name, form, ContentLength) VALUES (?, ?, ?, ?)"
+        self.con.execute(medicine, (medicine_id, name, form, content_length))
+
+    ### 1st wersion ###
+    # def add_medicine_to_table(self, medicine_id, name, power_descr, form, content_length):
+    #     medicine = "INSERT INTO Medicines(medicineId, name, PowerDescription, form, ContentLength) VALUES (?, ?, ?, ?, ?)"
+    #     self.con.execute(medicine, (medicine_id, name, power_descr, form, content_length))
 
     def add_active_substance_to_table(self, name):
         query_substance = "INSERT INTO ActiveSubstances(Name) VALUES (?)"
@@ -132,6 +147,10 @@ class MedicineDatabase:
         query_medicine_id = "SELECT * FROM Medicines WHERE MedicineID = (?)"
         return self.con.execute(query_medicine_id, [medicine_id]).fetchone()
 
+    def get_medicine_id_by_name(self, name:str):
+        query = f'SELECT * FROM Medicines WHERE Medicines.Name = "{name}"'
+        return self.con.execute(query).fetchone()
+
     def get_medicines_active_substances_id(self, medicine_id, active_substance_id):
         query = "SELECT ID FROM MedicinesActiveSubstances WHERE MedicineID = (?) AND ActiveSubstanceId = (?)"
         return self.con.execute(query, (medicine_id, str(active_substance_id[0]))).fetchone()
@@ -145,12 +164,16 @@ class MedicineDatabase:
                     AND Medicines.MedicineID = (?)"""
         return self.con.execute(query, [str(medicine_id)])
 
+    def get_medicines_by_name_like(self, part_name):
+        query = f'SELECT Medicines.Name FROM Medicines WHERE Medicines.Name LIKE "{part_name}%" ORDER BY Medicines.Name'
+        return self.con.execute(query).fetchall()
+
     def get_medicine_equivalents(self):
         query = f"""
                 SELECT
                 TAB1.MedicineID 
                 ,MED.Name 
-                ,MED.PowerDescryption 
+                ,MED.PowerDescription 
                 ,MED.Form 
                 ,MAS.ActiveSubstanceID 
                 ,EAN.EanNumber 
@@ -216,7 +239,7 @@ class MedicineDatabase:
 
     def insert_into_tmp(self, medicine_id):
         query = f'''INSERT INTO tmp 
-                SELECT MED.MedicineID, MED.Name, MED.PowerDescryption, MED.Form, 
+                SELECT MED.MedicineID, MED.Name, MED.PowerDescription, MED.Form, 
                     MAS.ActiveSubstanceID, DET.Concentration, DET.Unit
                 FROM MedicinesActiveSubstances MAS, MedicinesActiveSubstancesDetails DET
                 INNER JOIN Medicines MED on MAS.MedicineID = MED.MedicineID
@@ -238,7 +261,7 @@ class MedicineDatabase:
         self.con.close()
 
 
-with MedicineDatabase('models/medicine.db') as db:
+with MedicineDatabase('package/models/medicine.db') as db:
     db.create_medicine_table()
     db.create_active_substances_table()
     db.create_excipents_table()

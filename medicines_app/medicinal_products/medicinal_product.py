@@ -1,5 +1,5 @@
-from medicinal_products.excipents_getter import ExcipentsGetter
-from models.database_setup import MedicineDatabase
+from package.medicinal_products.excipents_getter import ExcipentsGetter
+from package.models import MedicineDatabase
 
 class MedicinalProduct:
     def __init__(self, medicine_id):
@@ -17,7 +17,7 @@ class MedicinalProduct:
         excipents_getter = ExcipentsGetter()
         if excipents_getter.get_excipents(self.id):
             return excipents_getter.get_excipents(self.id)
-        return ['Przykro nam! Dla tego leku nie mamy jeszcze składników dodatkowych!']
+        return []
 
     def get_equivalents(self) -> list:
         with MedicineDatabase('models/medicine.db') as db:
@@ -26,7 +26,8 @@ class MedicinalProduct:
             equivsalents = db.get_medicine_equivalents().fetchall()
             return self.__get_equivalents(equivalents=equivsalents)
 
-    def __get_equivalents(self, equivalents: list) -> list:
+    @staticmethod
+    def __get_equivalents(equivalents: list) -> list:
         _eqiuvs = []
         for equivalent in equivalents:
             _eqiuvs.append(MedicinalProduct(equivalent[0]))
