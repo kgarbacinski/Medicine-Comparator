@@ -1,6 +1,5 @@
 from medicines_app.equivs_api.excipents_getter import ExcipentsGetter
 from medicines_app.models.database_setup import MedicineDatabase
-import json
 
 class MedicinalProduct:
     def __init__(self, medicine_id):

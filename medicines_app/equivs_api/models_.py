@@ -7,3 +7,4 @@ class MedicinesSchema(ma.Schema):
     name = fields.fields.Str()
     form = fields.fields.Str()
     content_length = fields.fields.Integer()
+
