@@ -5,18 +5,24 @@ from .models_ import MedicinesSchema
 
 get_equivalents_blueprint = Blueprint('get_reference_drug', __name__)
 livesearch_blueprint = Blueprint('livesearch', __name__)
-index_blueprint = Blueprint('search_2', __name__)
+index_blueprint = Blueprint('index', __name__)
 
 medicine_schema = MedicinesSchema(many=True)
 
 
 @get_equivalents_blueprint.route('/equivalents', methods=['GET'])
 def get_equivalents() -> dict:
-    name = request.json['name']
-    with MedicineDatabase('medicines_app/models/medicine.db') as db:
-        found_drug_id = db.get_medicine_id_by_name(name)[0]
-        equivs = MedicinalProduct(found_drug_id).get_equivalents()
+    ean_or_name = request.json['ean_or_name']
+    medicine_id = __get_medicine_id(ean_or_name)
+    equivs = MedicinalProduct(medicine_id).get_equivalents()
     return medicine_schema.jsonify(equivs)
+
+def __get_medicine_id(ean_or_name):
+    ean_or_name = ean_or_name.replace('@', '')
+    with MedicineDatabase('medicines_app/models/medicine.db') as db:
+        if ean_or_name.isdigit():
+            return db.get_medicine_id_by_ean(ean_or_name)
+        return db.get_medicine_id_by_name(ean_or_name)
 
 @index_blueprint.route('/')
 def index():
@@ -31,3 +37,4 @@ def live_search():
     for i, medicine in enumerate(medicines):
         result.update({i: {'Name': medicine[0]}})
     return jsonify(result)
+
