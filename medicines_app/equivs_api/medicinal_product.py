@@ -9,6 +9,7 @@ class MedicinalProduct:
         self.name = db_data[1]
         self.form = db_data[2]
         self.content_length = db_data[3]
+        self.excipents = self.get_excipents()
 
     def get_excipents(self) -> list:
         return self.__get_validated_excipents()
