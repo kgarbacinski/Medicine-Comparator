@@ -132,8 +132,12 @@ class MedicineDatabase:
         return self.con.execute(query_medicine_id, [medicine_id]).fetchone()
 
     def get_medicine_id_by_name(self, name:str):
-        query = f'SELECT * FROM Medicines WHERE Medicines.Name = "{name}"'
-        return self.con.execute(query).fetchone()
+        query = f'SELECT Medicines.MedicineID FROM Medicines WHERE Medicines.Name = "{name}"'
+        return self.con.execute(query).fetchone()[0]
+
+    def get_medicine_id_by_ean(self, ean:int):
+        query = f'SELECT EanTable.MedicineID FROM EanTable WHERE EanTable.EanNumber = {ean}'
+        return self.con.execute(query).fetchone()[0]
 
     def get_medicines_active_substances_id(self, medicine_id, active_substance_id):
         query = "SELECT ID FROM MedicinesActiveSubstances WHERE MedicineID = (?) AND ActiveSubstanceId = (?)"
@@ -253,3 +257,4 @@ with MedicineDatabase('medicines_app/models/medicine.db') as db:
     db.create_medicines_active_substances_details_table()
     db.create_medicines_excipents_table()
     db.create_tmp_table()
+
