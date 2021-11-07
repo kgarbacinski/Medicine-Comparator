@@ -46,19 +46,19 @@ def update_token_status(token_id):
     db.session.commit()
 
 
-def add_tokens(db, tokens):
+def add_tokens(tokens):
     db.session.add_all(tokens)
     db.session.commit()
 
 
-def token_generator(db):
+def token_generator():
     tokens_used = Token.query(Token.is_used).count()
     token_list = []
     if tokens_used % 10 == 0:
         for x in range(10):
             token = Token(os.urandom(2), False)
             token_list.append(token)
-        add_tokens(db, token_list)
+        add_tokens(token_list)
 
 
 @LOGIN_MANAGER.user_loader

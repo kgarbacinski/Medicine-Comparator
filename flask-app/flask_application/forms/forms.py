@@ -15,11 +15,3 @@ class RegisterForm(FlaskForm):
     email = StringField('Email', validators=[InputRequired(), Length(max=50)])
     token = StringField('Token', validators=[InputRequired(), Length(max=15)])
     submit = SubmitField('Register')
-
-class SearchForm(FlaskForm):
-    medicine_to_search = StringField('Type medicine name or EAN to find substitute')
-    search = SubmitField('Search')
-
-
-class EditForm(FlaskForm):
-    edit_medicine = SubmitField('Edit')

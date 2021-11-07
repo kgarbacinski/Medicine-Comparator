@@ -2,51 +2,79 @@
 {% block title %}<title>home</title>{% endblock %}
 {% block content %}
 {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+{% for message in messages %}
+{{ message }}
+{% endfor %}
+{% endif %}
 {% endwith %}
-<p class="title" style="margin-left: 35px;">
-    Search
-</p>
-
 <div class="container">
-    <form action="/search/" method="POST">
-        {{ form.hidden_tag() }}
-        <div class="field">
-            {{ form.medicine_to_search.label(class_= "label is-medium") }}
-            <div class="field is-horizontal">
-            {{ form.medicine_to_search(class_= "input") }}
-            </div>
+    <div class="row">
+        <div class="col">
+            <h1>Search</h1>
+            <hr>
+
             <div class="field">
-                <div class="alert alert alert-warning alert-dismissible">
-                    <p class="control">{{ form.search(class_="button is-link is-medium") }}
-                        <a class="button is-link" href="/table">
-                            Test Search
-                        </a>
-                    </p>
+                <div class="control" style="display: inline-block;">
+                    <input type="text" class="input is-normal is-focused" id="medicine_name" placeholder="Enter medicine name">
                 </div>
+                <div class="select is-normal is-focused">
+                    <select id="concentration">
+                        <option value="">--Choose concentration--</option>
+                        <option value="concentration">5mg</option>
+                        <option value="concentration">10mg</option>
+                        <option value="concentration">15mg</option>
+                        <option value="concentration">20mg</option>
+                        <option value="concentration">25mg</option>
+                    </select>
+                </div>
+                <button class="button is-link" onclick="submit_search();">Search</button>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 
 
-<!--<div class="field has-addons">-->
-<!--    <form method="post"></form>-->
-<!--    <p class="control">-->
-<!--    </p>-->
-<!--    <p class="control is-expanded">-->
-<!--        <label class="label is-small">Type medicine name or EAN number to find substitute <label>-->
-<!--        <input class="input" type="text" placeholder="EAN/NAME">-->
-<!--  <div class="control">-->
-<!--    <a class="button is-info">-->
-<!--      Search-->
-<!--    </a>-->
-<!--    </p>-->
-<!--</div>-->
+{% endblock %}
+
+{% block script %}
+<script>
+
+    function submit_search() {
+
+        var name = document.getElementById("medicine_name");
+        var name = document.getElementById("concentration");
+
+        var medicine = {
+        medicine: medicine_name.value
+        concentration: concentration.value
+        };
+
+
+        fetch('${api-endpoint}',{
+            method:"POST"
+            credentials: "include"
+            body: JSON.stringify(medicine),
+            cache: "no-cache"
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        })
+    }   .then(function (response) {
+
+           if(response.status !== 200) {
+
+           console.log('Response status was not 200 ${response.status}');
+           return ;
+
+           }
+
+           response.json().then(function(data) {
+                console.log(data)
+           })
+        })
+
+</script>
 
 
 {% endblock %}

@@ -19,11 +19,11 @@ def create_app():
     LOGIN_MANAGER.init_app(app)
     LOGIN_MANAGER.login_message = "You're logged in succsesfully"
 
-    from .views import MainPage, SignupView, LoginView, SearchView
-    app.add_url_rule('/', view_func=MainPage.as_view('main_page', template_name='home.html'))
+    from .views import HomePage, SignupView, LoginView, SearchView
+    app.add_url_rule('/', view_func=HomePage.as_view('main_page', template_name='home.html'))
     app.add_url_rule('/signup', view_func=SignupView.as_view('signup', template_name='signup.html'))
     app.add_url_rule('/login', view_func=LoginView.as_view('login', template_name='login.html'))
-    app.add_url_rule('/table', view_func=SearchView.as_view('table', template_name='table.html'))
+    app.add_url_rule('/search_result', view_func=SearchView.as_view('table', template_name='search_result.html'))
     create_database(app)
     return app
 
@@ -33,4 +33,3 @@ def create_database(app):
     if not path.exists('database.db'):
         db.create_all(app=app)
         print("Created database")
-
