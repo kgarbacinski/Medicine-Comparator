@@ -35,9 +35,13 @@ class PDFReader:
     def clean_excipents_list(self, excipents_text_lines):
         final_list_of_excipents = []
         for i in excipents_text_lines:
-            i = i.strip()
+            i = i.strip().lower()
             try:
                 i = i.replace(re.search('^-\s*', i).group(), '')
+            except:
+                pass
+            try:
+                i = i.replace(re.search('\.$', i).group(), '')
             except:
                 pass
 
@@ -53,20 +57,17 @@ class PDFReader:
         else:
             return excipents_text.splitlines()
 
-
-
-
     def make_excipents_line_by_line(self, excipents_text, split_mark):
         if excipents_text.count(split_mark) > 1:
             excipents_text = excipents_text.replace('\n', '')
             excipents_text = excipents_text.replace(split_mark, '\n')
-            return excipents_text
-        return excipents_text
+            return excipents_text.strip().lower()
+        return excipents_text.strip().lower()
 
     def set_start_end_paragraph(self, pdf_to_text):
-        start = pdf_to_text.index(re.search('6.(.)+wykaz(.)+pomocniczych', pdf_to_text, re.IGNORECASE).group()) # 1
-        start_length = len(re.search('6.(.)+wykaz(.)+pomocniczych', pdf_to_text, re.IGNORECASE).group()) # 1
-        end = pdf_to_text.index(re.search('6.(.)+niezgodności(.)+(farmaceutyczne)*', pdf_to_text, re.IGNORECASE).group()) #1
+        start = pdf_to_text.index(re.search('6.(.)+wykaz(.)+pomocniczych', pdf_to_text, re.IGNORECASE).group())
+        start_length = len(re.search('6.(.)+wykaz(.)+pomocniczych', pdf_to_text, re.IGNORECASE).group())
+        end = pdf_to_text.index(re.search('6.(.)+niezgodności(.)+(farmaceutyczne)*', pdf_to_text, re.IGNORECASE).group())
         return [start, end, start_length]
 
 def pdf_scrapper(url):
