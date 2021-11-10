@@ -21,8 +21,12 @@ def __get_medicine_id(ean_or_name):
     ean_or_name = ean_or_name.replace('@', '')
     with MedicineDatabase('medicines_app/models/medicine.db') as db:
         if ean_or_name.isdigit():
-            return db.get_medicine_id_by_ean(ean_or_name)
-        return db.get_medicine_id_by_name(ean_or_name)
+            result = db.get_medicine_id_by_ean(ean_or_name)
+        else:
+            result =  db.get_medicine_id_by_name(ean_or_name)
+        if result is None:
+            return # pusty json
+        return result
 
 @index_blueprint.route('/')
 def index():
