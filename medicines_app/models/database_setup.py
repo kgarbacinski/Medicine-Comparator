@@ -133,11 +133,11 @@ class MedicineDatabase:
 
     def get_medicine_id_by_name(self, name:str):
         query = f'SELECT Medicines.MedicineID FROM Medicines WHERE Medicines.Name = "{name}"'
-        return self.con.execute(query).fetchone()[0]
+        return self.con.execute(query).fetchone()
 
     def get_medicine_id_by_ean(self, ean:int):
         query = f'SELECT EanTable.MedicineID FROM EanTable WHERE EanTable.EanNumber = {ean}'
-        return self.con.execute(query).fetchone()[0]
+        return self.con.execute(query).fetchone()
 
     def get_medicines_active_substances_id(self, medicine_id, active_substance_id):
         query = "SELECT ID FROM MedicinesActiveSubstances WHERE MedicineID = (?) AND ActiveSubstanceId = (?)"
