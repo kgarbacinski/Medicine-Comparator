@@ -1,10 +1,28 @@
 import sqlite3
+from pathlib import Path
+import os
 
 
 class MedicineDatabase:
     def __init__(self, path):
+        # self.path = self.get_path(path)
         self.con = sqlite3.connect(path)
 
+    def get_path(self, path):
+        if os.path.exists(path):
+            print(path)
+            return path
+        print(path.replace('/', '\\'))
+        return path.replace('/', '\\')
+
+    def chk_conn(self, conn):
+        try:
+            conn.cursor()
+            return True
+        except Exception as ex:
+            return False
+
+# "(Path(path).absolute().as_uri())"
     def create_medicine_table(self):
         medicine_table = '''CREATE TABLE IF NOT EXISTS Medicines(
                             MedicineID INTEGER PRIMARY KEY,
@@ -248,13 +266,14 @@ class MedicineDatabase:
         self.con.close()
 
 
-with MedicineDatabase('medicines_app/models/medicine.db') as db:
-    db.create_medicine_table()
-    db.create_active_substances_table()
-    db.create_excipents_table()
-    db.create_ean_table()
-    db.create_medicines_active_substances_table()
-    db.create_medicines_active_substances_details_table()
-    db.create_medicines_excipents_table()
-    db.create_tmp_table()
+
+# with MedicineDatabase('../models/medicine.db') as db:
+#     db.create_medicine_table()
+#     db.create_active_substances_table()
+#     db.create_excipents_table()
+#     db.create_ean_table()
+#     db.create_medicines_active_substances_table()
+#     db.create_medicines_active_substances_details_table()
+#     db.create_medicines_excipents_table()
+#     db.create_tmp_table()
 

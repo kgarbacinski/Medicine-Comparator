@@ -13,7 +13,9 @@ medicine_schema = MedicinesSchema(many=True)
 @get_equivalents_blueprint.route('/equivalents', methods=['GET'])
 def get_equivalents() -> jsonify:
     ean_or_name = request.json['ean_or_name']
+    print(f'ean_or_name: {ean_or_name}')
     medicine_id = __get_medicine_id(ean_or_name)
+    print(f'medicine_id: {medicine_id}')
     if medicine_id:
         equivs = MedicinalProduct(medicine_id).get_equivalents()
         return medicine_schema.jsonify(equivs)
@@ -21,12 +23,12 @@ def get_equivalents() -> jsonify:
 
 def __get_medicine_id(ean_or_name):
     ean_or_name = ean_or_name.replace('@', '')
-    with MedicineDatabase('medicines_app/models/medicine.db') as db:
+    with MedicineDatabase('../models/medicine.db') as db:
         if ean_or_name.isdigit():
             result = db.get_medicine_id_by_ean(ean_or_name)
         else:
             result = db.get_medicine_id_by_name(ean_or_name)
-        if result is None:
+        if not result:
             return None
         return result[0]
 
