@@ -248,7 +248,7 @@ class MedicineDatabase:
         self.con.close()
 
 
-with MedicineDatabase('medicines_app/models/medicine.db') as db:
+with MedicineDatabase('medicine.db') as db:
     db.create_medicine_table()
     db.create_active_substances_table()
     db.create_excipents_table()

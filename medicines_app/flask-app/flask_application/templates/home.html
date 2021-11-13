@@ -16,19 +16,9 @@
 
             <div class="field">
                 <div class="control" style="display: inline-block;">
-                    <input type="text" class="input is-normal is-focused" id="medicine_name" placeholder="Enter medicine name">
+                    <input style="width: 1000px;" type="text" class="input is-normal is-focused" id="medicine_name" placeholder="Enter medicine name">
                 </div>
-                <div class="select is-normal is-focused">
-                    <select id="concentration">
-                        <option value="">--Choose concentration--</option>
-                        <option value="concentration">5mg</option>
-                        <option value="concentration">10mg</option>
-                        <option value="concentration">15mg</option>
-                        <option value="concentration">20mg</option>
-                        <option value="concentration">25mg</option>
-                    </select>
-                </div>
-                <button class="button is-link" onclick="submit_search();">Search</button>
+                <button class="button is-link" onclick="submitSearch()">Search</button>
             </div>
         </div>
     </div>
@@ -39,42 +29,23 @@
 
 {% block script %}
 <script>
+function submitSearch() {
+    var name = document.getElementById("medicine_name");
 
-    function submit_search() {
-
-        var name = document.getElementById("medicine_name");
-        var name = document.getElementById("concentration");
-
-        var medicine = {
+    var medicine = {
         medicine: medicine_name.value
-        concentration: concentration.value
-        };
+    };
 
-
-        fetch('${api-endpoint}',{
-            method:"POST"
-            credentials: "include"
-            body: JSON.stringify(medicine),
-            cache: "no-cache"
-            headers: new Headers({
-                "content-type": "application/json"
-            })
+    fetch("http://localhost:3000/equivalents",{
+        mode: "no-cors",
+        method: "GET",
+        credentials:"include",
+        cache:"no-cache",
+        body: JSON.stringify(medicine),
+        headers: new Headers({
+            "content-type": "application/json"
         })
-    }   .then(function (response) {
-
-           if(response.status !== 200) {
-
-           console.log('Response status was not 200 ${response.status}');
-           return ;
-
-           }
-
-           response.json().then(function(data) {
-                console.log(data)
-           })
-        })
-
+    })
+}
 </script>
-
-
 {% endblock %}

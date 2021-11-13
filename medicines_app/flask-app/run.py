@@ -1,6 +1,5 @@
-from .flask_application.main import create_app, db
-from .flask_application.models import add_tokens, Token
-import os
+from flask_application.main import create_app
+
 
 app = create_app()
 
