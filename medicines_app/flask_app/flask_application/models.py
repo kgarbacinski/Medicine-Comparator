@@ -53,10 +53,12 @@ def add_tokens(tokens):
 
 def token_generator():
     tokens_used = Token.query(Token.is_used).count()
+    token_list = []
     if tokens_used % 10 == 0:
         for x in range(10):
             token = Token(os.urandom(2), False)
-        add_tokens(token)
+            token_list.append(token)
+        add_tokens(token_list)
 
 
 @LOGIN_MANAGER.user_loader

@@ -1,5 +1,5 @@
 import re
-from .regex_patterns import RegexPatterns
+from regex_patterns import RegexPatterns
 
 
 class MedicinalProductBuilder:
