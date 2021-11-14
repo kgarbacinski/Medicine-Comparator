@@ -64,5 +64,6 @@ class SearchView(MethodView):
     def __init__(self, template_name):
         self.template_name = template_name
 
-    def post(self): pass
+    def get(self):
+        return render_template(self.template_name)
 

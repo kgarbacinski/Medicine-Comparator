@@ -22,7 +22,7 @@ class MedicineDatabase:
         except Exception as ex:
             return False
 
-# "(Path(path).absolute().as_uri())"
+    # "(Path(path).absolute().as_uri())"
     def create_medicine_table(self):
         medicine_table = '''CREATE TABLE IF NOT EXISTS Medicines(
                             MedicineID INTEGER PRIMARY KEY,
@@ -146,16 +146,16 @@ class MedicineDatabase:
         return self.con.execute(query).fetchall()
 
     def get_medicine_by_id(self, medicine_id):
-        query_medicine_id = "SELECT * FROM Medicines WHERE MedicineID = (?)"
+        query_medicine_id = "SELECT * FROM Medicines WHERE MedicineID = ? "
         return self.con.execute(query_medicine_id, [medicine_id]).fetchone()
 
-    def get_medicine_id_by_name(self, name:str):
-        query = f'SELECT Medicines.MedicineID FROM Medicines WHERE Medicines.Name = "{name}"'
-        return self.con.execute(query).fetchone()
+    def get_medicine_id_by_name(self, name: str):
+        query = 'SELECT Medicines.MedicineID FROM Medicines WHERE Medicines.Name = (?) '
+        return self.con.execute(query, [name]).fetchone()
 
     def get_medicine_id_by_ean(self, ean:int):
-        query = f'SELECT EanTable.MedicineID FROM EanTable WHERE EanTable.EanNumber = {ean}'
-        return self.con.execute(query).fetchone()
+        query = f'SELECT EanTable.MedicineID FROM EanTable WHERE EanTable.EanNumber = (?)'
+        return self.con.execute(query, [ean]).fetchone()
 
     def get_medicines_active_substances_id(self, medicine_id, active_substance_id):
         query = "SELECT ID FROM MedicinesActiveSubstances WHERE MedicineID = (?) AND ActiveSubstanceId = (?)"
@@ -253,7 +253,6 @@ class MedicineDatabase:
                 GROUP BY MAS.ActiveSubstanceID'''
         self.con.execute(query, [str(medicine_id)])
 
-
     def __enter__(self):
         return self
 
@@ -266,7 +265,6 @@ class MedicineDatabase:
         self.con.close()
 
 
-<<<<<<< HEAD
 with MedicineDatabase('medicine.db') as db:
     db.create_medicine_table()
     db.create_active_substances_table()
@@ -276,7 +274,6 @@ with MedicineDatabase('medicine.db') as db:
     db.create_medicines_active_substances_details_table()
     db.create_medicines_excipents_table()
     db.create_tmp_table()
-=======
 
 # with MedicineDatabase('../models/medicine.db') as db:
 #     db.create_medicine_table()
@@ -287,5 +284,3 @@ with MedicineDatabase('medicine.db') as db:
 #     db.create_medicines_active_substances_details_table()
 #     db.create_medicines_excipents_table()
 #     db.create_tmp_table()
->>>>>>> upstream/linux
-

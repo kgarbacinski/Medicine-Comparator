@@ -1,25 +1,36 @@
 {% extends 'base.html'%}
 
-{% block title%}<title>result</title> {% endblock %}
+{% block title%}<title>result_search</title> {% endblock %}
 
 {% block content %}
-<table class="table" style="top:-70px;">
+<table id="table" class="table" style="top:-70px;">
   <thead>
     <tr>
       <th><abbr title="medicine">Medicine name </abbr></th>
       <th><abbr title="form">Form</abbr></th>
-      <th><abbr title="descirption">Description</abbr></th>
+      <th><abbr title="descirption">ID</abbr></th>
       <th><abbr title="excipents">Excipents</abbr></th>
     </tr>
-    <tbody>
-        <tr>
-            <th>Amlopin</th>
-            <th>form</th>
-            <th>Description of medicine</th>
-            <th>Excipents</th>
-            <th>{{ form.edit_medicine(class_="button is-warning") }}</th>
-        </tr>
-
-</tbody>
+    <tbody id="tableData"></tbody>
 </table>
     {% endblock %}
+
+{% block script %}
+<script>
+var retrieve = localStorage.getItem('data');
+var finalData = JSON.parse(retrieve);
+
+var k = '<tbody>'
+for (i = 0;i < finalData.length; i++){
+    k+= '<tr>';
+    k+= '<td>' + finalData[i].name + '</td>';
+    k+= '<td>' + finalData[i].form + '</td>';
+    k+= '<td>' + finalData[i].id + '</td>';
+    k+= '<td>' + finalData[i].excipents + '</td>';
+    k+= '</tr>';
+}
+k+='</tbody>';
+document.getElementById('tableData').innerHTML = k;
+
+</script>
+{% endblock %}
