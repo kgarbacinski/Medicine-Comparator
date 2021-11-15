@@ -213,8 +213,9 @@ class MedicineDatabase:
                 LEFT JOIN ActiveSubstances ACT on ACT.ActiveSubstanceID = MAS.ActiveSubstanceID
                 WHERE TAB1.MedicineID <> (SELECT tmp.MedicineID FROM tmp)
                 GROUP BY TAB1.MedicineID
+                ORDER BY MED.Name
                 """
-        return self.con.execute(query)
+        return self.con.execute(query).fetchall()
 
     def get_medicinal_product_excipents(self, medicine_id):
         query = f"""

@@ -12,23 +12,22 @@ medicine_schema = MedicinesSchema(many=True)
 
 @get_equivalents_blueprint.route('/equivalents', methods=['GET', 'POST'])
 def get_equivalents():
-    ean_or_name = request.get_json()
-    print(f'ean_or_name: {ean_or_name}')
+    ean_or_name = request.get_json()['name']
     medicine_id = __get_medicine_id(ean_or_name)
-    print(f'medicine_id: {medicine_id}')
     if medicine_id:
-        equivs = MedicinalProduct(medicine_id).get_equivalents()
-        return medicine_schema.jsonify(equivs)
+        all_medicines = [MedicinalProduct(medicine_id)]
+        all_medicines.extend(MedicinalProduct(medicine_id).get_equivalents())
+        return medicine_schema.jsonify(all_medicines)
     return make_response(jsonify({'id': '', 'name': '', 'excipents': [], 'content_length': 0, 'form': ''}))
 
 
 def __get_medicine_id(ean_or_name):
-    # ean_or_name = ean_or_name.replace('@', '')
+    ean_or_name = ean_or_name.replace('@', '')
     with MedicineDatabase('../models/medicine.db') as db:
-        # if ean_or_name.isdigit():
-        #     result = db.get_medicine_id_by_ean(ean_or_name)
-        # else:
-        result = db.get_medicine_id_by_name(ean_or_name["name"])
+        if ean_or_name.isdigit():
+            result = db.get_medicine_id_by_ean(ean_or_name)
+        else:
+            result = db.get_medicine_id_by_name(ean_or_name)
         if not result:
             return None
         return result[0]
@@ -42,7 +41,7 @@ def index():
 @livesearch_blueprint.route('/livesearch', methods=['GET', 'POST'])
 def live_search():
     search_box = request.form.get("text")
-    with MedicineDatabase('medicines_app/models/medicine.db') as db:
+    with MedicineDatabase('../models/medicine.db') as db:
         medicines = db.get_medicines_by_name_like(search_box)
     result = {}
     for i, medicine in enumerate(medicines):

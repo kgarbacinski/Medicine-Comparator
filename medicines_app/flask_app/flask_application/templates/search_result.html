@@ -3,6 +3,10 @@
 {% block title%}<title>result_search</title> {% endblock %}
 
 {% block content %}
+
+
+
+<div id="cards"></div>
 <table id="table" class="table" style="top:-70px;">
   <thead>
     <tr>
@@ -14,14 +18,60 @@
     <tbody id="tableData"></tbody>
 </table>
     {% endblock %}
-
 {% block script %}
+
 <script>
 var retrieve = localStorage.getItem('data');
 var finalData = JSON.parse(retrieve);
+console.log(finalData);
+
+var crd = [];
+crd.push('<div class="card-columns"><div class="card"><div class="card-body">');
+crd.push('<h4 class="card-title">' + finalData[0].name + '</h4>');
+crd.push('<h5 class="card-title">' + finalData[0].form + '</h5>');
+crd.push('<ul class="list-unstyled">');
+console.log(finalData[0]);
+crd = crd.concat(getExcipents(finalData[0]));
+crd.push('</ul></div></div>');
+crd.push('<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">');
+crd.push('<div class="carousel-inner">');
+
+crd.push('<div class="carousel-item active"><div class="card"><div class="card-body">');
+crd.push('<h3 class="card-title">SPRAWDŹ ZAMIENNIK</h3>');
+crd.push('<h4 class="card-title">Porównaj substancje pomocnicze</h4>');
+crd.push('<h4 class="card-title"><br><br></h4>');
+crd.push('<h6 class="card-title">(Przeglądaj za pomocą strzałek)</h6></div></div></div>');
+console.log(finalData.length);
+if (finalData.length > 1){
+for (i = 1;i < finalData.length; i++)
+  {
+  crd.push('<div class="carousel-item"><div class="card"><div class="card-body">');
+  crd.push('<h4 class="card-title">' + finalData[i].name + '</h4>');
+  crd.push('<h5 class="card-title">' + finalData[i].form + '</h5>');
+  crd.push('<ul class="list-unstyled" id="excipents' + i +'">');
+<!--  console.log(getExcipents(finalData[i]));-->
+<!--  crd = crd.concat(getExcipents(finalData[i]));-->
+  crd.push('</ul></div></div></div>');
+  }
+}
+
+crd.push('<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">');
+crd.push('<span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(100%);"></span>');
+crd.push('<span class="sr-only">Previous</span></a>');
+crd.push('<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">');
+crd.push('<span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(100%);"></span>');
+crd.push('<span class="sr-only">Next</span></a></div></div></div>');
+var cards = '';
+for (i=0; i<crd.length; i++){
+  cards += crd[i];
+}
+console.log(cards);
+
+
+
 
 var k = '<tbody>'
-for (i = 0;i < finalData.length; i++){
+for (i = 1;i < finalData.length; i++){
     k+= '<tr>';
     k+= '<td>' + finalData[i].name + '</td>';
     k+= '<td>' + finalData[i].form + '</td>';
@@ -30,7 +80,32 @@ for (i = 0;i < finalData.length; i++){
     k+= '</tr>';
 }
 k+='</tbody>';
+document.getElementById('cards').innerHTML = cards;
 document.getElementById('tableData').innerHTML = k;
 
+
+
+function getExcipents(finalData){
+  var excipents = '';
+  for (i=0; i<(finalData.excipents).length; i++){
+    excipents += '<li>' + finalData.excipents[i] + '</li>';
+    };
+
+  return excipents
+}
+
+</script>
+<script>
+var retrieve = localStorage.getItem('data');
+var finalData = JSON.parse(retrieve);
+if (finalData.length > 1){
+  for (let i = 1;i < finalData.length; i++){
+  console.log(finalData[i]);
+  let excipents = getExcipents(finalData[i]);
+  iter = i
+  var elementId = 'excipents' + iter;
+  console.log(elementId);
+  document.getElementById(elementId).innerHTML = excipents;
+}};
 </script>
 {% endblock %}
