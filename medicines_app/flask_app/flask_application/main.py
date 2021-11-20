@@ -30,6 +30,7 @@ def create_app():
 
 def create_database(app):
 
-    if not path.exists('database.db'):
+    if not os.path.exists('flask_app/flask_application/database.db'):
         db.create_all(app=app)
-        print("Created database")
+        print('db created')
+
