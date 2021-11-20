@@ -24,7 +24,7 @@ class MedicinalProduct:
         with MedicineDatabase('../models/medicine.db') as db:
             db.delete_from_tmp()
             db.insert_into_tmp(self.id)
-            equivsalents = db.get_medicine_equivalents().fetchall()
+            equivsalents = db.get_medicine_equivalents()
             return self.__get_equivalents(equivalents=equivsalents)
 
     @staticmethod

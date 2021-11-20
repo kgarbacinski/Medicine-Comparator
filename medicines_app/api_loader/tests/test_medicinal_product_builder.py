@@ -1,4 +1,4 @@
-from ..medicinal_product_builder import MedicinalProductBuilder
+from medicines_app.api_loader.medicinal_product_builder import MedicinalProductBuilder
 
 
 class Tests:

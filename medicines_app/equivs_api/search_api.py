@@ -17,9 +17,11 @@ def get_equivalents():
     medicine_id = __get_medicine_id(request_medicine)
     print(f'medicine_id: {medicine_id}')
     if medicine_id:
-        equivs = MedicinalProduct(medicine_id).get_equivalents()
-        return medicine_schema.jsonify(equivs)
+        all_medicines = [MedicinalProduct(medicine_id)]
+        all_medicines.extend(MedicinalProduct(medicine_id).get_equivalents())
+        return medicine_schema.jsonify(all_medicines)
     return make_response(jsonify({'id': '', 'name': '', 'excipents': [], 'content_length': 0, 'form': ''}))
+
 
 
 def __get_medicine_id(request_medicine):
@@ -32,6 +34,7 @@ def __get_medicine_id(request_medicine):
         if not result:
             return None
         return result[0]
+
 @index_blueprint.route('/')
 def index():
     return render_template("index.html")
@@ -40,7 +43,7 @@ def index():
 @livesearch_blueprint.route('/livesearch', methods=['GET', 'POST'])
 def live_search():
     search_box = request.form.get("text")
-    with MedicineDatabase('medicines_app/models/medicine.db') as db:
+    with MedicineDatabase('../models/medicine.db') as db:
         medicines = db.get_medicines_by_name_like(search_box)
     result = {}
     for i, medicine in enumerate(medicines):
