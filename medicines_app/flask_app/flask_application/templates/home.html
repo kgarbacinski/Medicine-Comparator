@@ -36,14 +36,14 @@ function submitSearch() {
     var medicine_name = document.getElementById("medicine_name");
 
     var medicine = {
-        name: medicine_name.value
+        name : medicine_name.value
     };
-    fetch('http://192.168.0.157:5001/equivalents', {
-        method: "POST",
-        body: JSON.stringify(medicine),
+
+        fetch('http://192.168.0.134:5001/equivalents', {
         cache: "no-cache",
         headers: new Headers({
             'Content-Type': 'application/json',
+            'Medicine-Name': medicine.name
         })
     })
     .then(function(response) {
