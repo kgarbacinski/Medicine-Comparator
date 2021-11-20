@@ -7,7 +7,7 @@ import requests
 
 class DatabaseUpdater:
     def __init__(self):
-        self.db_path = 'medicines_app/models/medicine.db'
+        self.db_path = '../models/medicine.db'
         self.medicinal_products = self.__get_products()
 
     def __get_products(self):
@@ -28,7 +28,6 @@ class DatabaseUpdater:
             if not medicines_id:
                 db.add_medicine_to_table(product.id,
                                          product.name,
-                                         # product.product_power_original,
                                          product.pharmaceutical_form,
                                          product.content_length)
 
