@@ -3,3 +3,4 @@
 .flask-app/flask_application/__pycache__/main.cpython-38.pyc
 .flask-app/flask_application/__pycache__/models.cpython-38.pyc
 venv/
+**/__pycache__/
