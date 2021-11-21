@@ -7,7 +7,7 @@ import re
 class PDFReader:
 
     def get_page(self, url):
-        request = requests.get(url)
+        request = requests.get(url, verify=False)
         file = io.BytesIO(request.content)
         return file
 
