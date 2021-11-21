@@ -18,7 +18,8 @@
 
                 <div class="control" style="display: inline-block;">
                     <input style="width: 1000px;" type="text" class="input is-normal is-focused"
-                           id="medicine_name" placeholder="Enter medicine name">
+                           id="medicine_name" placeholder="Enter medicine name"
+                    oninput="liveSearch();" list="medicines">
                     <datalist id="medicines"></datalist>
                 </div>
                 <button type="submit" class="button is-link" onclick="submitSearch();">Search</button>
@@ -29,7 +30,6 @@
 
 
 {% endblock %}
-
 {% block script %}
 <script>
 function submitSearch() {
@@ -39,7 +39,7 @@ function submitSearch() {
         name : medicine_name.value
     };
 
-        fetch('http://192.168.0.134:5001/equivalents', {
+        fetch('http://192.168.0.157:5001/equivalents', {
         cache: "no-cache",
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -63,5 +63,42 @@ function submitSearch() {
     })
 }
 </script>
+<script>
+function liveSearch() {
+    var medicine_name = document.getElementById("medicine_name").value;
+    console.log(medicine_name);
+
+    if (medicine_name.length != ''){
+        fetch('http://192.168.0.157:5001/livesearch', {
+        cache: "no-cache",
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Medicine-Name': medicine_name
+        })
+    })
+    .then(function(response) {
+
+        if (response.status !== 200) {
+
+            console.log(`Response status was not 200: ${response.status}`)
+            return ;
+        }
+
+        response.json().then(function (data) {
+        localStorage.setItem('data', JSON.stringify(data));
+        var retrieve = localStorage.getItem('data');
+        var finalData = JSON.parse(retrieve);
+        console.log(finalData);
+        var options = '';
+        for (i=0; i<20; i++){
+            options += '<option>' + finalData[i] + '</option>';
+        }
+        console.log(options);
+        document.getElementById('medicines').innerHTML = options;
+        })
+    })
+}}
+</script>
+
 
 {% endblock %}
