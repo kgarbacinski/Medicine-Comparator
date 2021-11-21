@@ -4,7 +4,7 @@ medicines_app/equivs_api/__pycache__/
 medicines_app/flask_app/flask_application/__pycache__/
 medicines_app/flask_app/flask_application/forms/__pycache__/
 medicines_app/models/__pycache__/
-medicines_app/scrapping/
+medicines_app/scrapping/__pycache__/
 medicines_app/scrapping/tests/
 
 .idea/
