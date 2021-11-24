@@ -43,7 +43,8 @@ function submitSearch() {
         cache: "no-cache",
         headers: new Headers({
             'Content-Type': 'application/json',
-            'Medicine-Name': medicine.name
+            'Medicine-Name': medicine.name,
+            'X-Access-Token': {{ session.JWT_TOKEN }}
         })
     })
     .then(function(response) {

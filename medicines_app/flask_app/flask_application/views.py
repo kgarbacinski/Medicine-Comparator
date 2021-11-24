@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, session
 from flask.views import MethodView
 from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,6 +12,7 @@ class HomePage(MethodView):
         self.template_name = template_name
 
     def get(self):
+        session['JWT_TOKEN'] = jwt.encode({}, app.config['SECRET_KEY'], algorithm="HS256")
         return render_template(self.template_name)
 
 
