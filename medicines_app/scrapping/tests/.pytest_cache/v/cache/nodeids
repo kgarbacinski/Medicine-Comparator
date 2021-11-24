@@ -1,0 +1,7 @@
+[
+  "test_medicine_info_scrapper.py::test_coma_separated_excipients_pdf_scrapper",
+  "test_medicine_info_scrapper.py::test_eol_separated_excipients_pdf_scrapper",
+  "test_medicine_info_scrapper.py::test_one_excipient_pdf_scrapper",
+  "test_medicine_info_scrapper.py::test_pdf_scrapper",
+  "test_medicine_info_scrapper.py::test_two_pagea_excipients_pdf_scrapper"
+]
