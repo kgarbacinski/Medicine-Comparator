@@ -17,6 +17,7 @@
     <li>SQLAlchemy</li>
     <li>JavaScript</li>
     <li>Bootstrap</li>
+    <li>Regular expressions</li>
   </ul>
 
 ## Application View
