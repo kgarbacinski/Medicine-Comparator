@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, height=devide-height">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     {% block title %}
     {% endblock %}
     {% block style %}
@@ -12,6 +13,9 @@
     <title>Medicine Comprasion</title>
 
 </head>
+
+
+<body>
 <nav class="navbar is-fixed-top is-dark" role="navigation" aria-label="main-navigation">
     <div class="navbar-brand">
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
@@ -36,12 +40,9 @@
         </div>
     </div>
 </nav>
-
-<body>
-
 <section class="hero  is-light is-medium">
     <div class="hero-head"></div>
-    <div class="hero-body is-align-items-stretch">
+    <div class="hero-body is-align-items-stretch" style="padding: 6rem 1.5rem;">
         {% block content %}
         {% endblock %}
     </div>
