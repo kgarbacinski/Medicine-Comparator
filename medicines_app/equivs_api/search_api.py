@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, request, jsonify, render_template, make_response, Response
 from medicines_app.models.database_setup import MedicineDatabase
 from .medicinal_product import MedicinalProduct
@@ -15,8 +16,8 @@ medicine_schema = MedicinesSchema(many=True)
 def get_equivalents():
     try:
         jwt_token = request.headers.get("X-Access-Token")
-        jwt.decode(jwt_token, app.config["SECRET_KEY"], algorithms=["HS256"])
-    except InvalidTokenError as e:
+        jwt.decode(jwt_token, os.environ.get('SECRET_KEY'), algorithms=["HS256"])
+    except jwt.InvalidTokenError:
         return Response("WAF: Access Denied for this Host.", status=403)
 
     request_medicine = request.headers.get('Medicine-Name')
@@ -39,6 +40,7 @@ def __get_medicine_id(request_medicine):
         if not result:
             return None
         return result[0]
+
 
 @index_blueprint.route('/')
 def index():

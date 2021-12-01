@@ -5,7 +5,6 @@ ma = Marshmallow()
 
 def create_app():
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = os.environ("SECRET_KEY")
 
     ma.init_app(app=app)
     CORS(app)

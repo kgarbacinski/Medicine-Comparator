@@ -1,10 +1,11 @@
-from flask import render_template, flash, redirect, url_for, request, session
+from flask import render_template, flash, redirect, url_for, session
 from flask.views import MethodView
 from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User, Token, register_user, update_token_status
 from .forms.forms import LoginForm, RegisterForm
-
+import jwt
+import os
 
 class HomePage(MethodView):
 
@@ -12,7 +13,7 @@ class HomePage(MethodView):
         self.template_name = template_name
 
     def get(self):
-        session['JWT_TOKEN'] = jwt.encode({}, app.config['SECRET_KEY'], algorithm="HS256")
+        session['API_SESSION_TOKEN'] = jwt.encode({}, os.environ.get("SECRET_KEY"), algorithm="HS256")
         return render_template(self.template_name)
 
 
@@ -67,4 +68,3 @@ class SearchView(MethodView):
 
     def get(self):
         return render_template(self.template_name)
-
