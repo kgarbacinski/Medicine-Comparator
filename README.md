@@ -20,6 +20,9 @@
     <li>Regular expressions</li>
   </ul>
 
+##Enviroment configuration
+After installation requirements remember to add your .env file and setup your SECRET_KEY.
+
 ## Application View
 <img src="https://user-images.githubusercontent.com/51199148/143889345-26d0588f-6e18-4011-8986-1d0a51f0ded4.png">
 <br>
