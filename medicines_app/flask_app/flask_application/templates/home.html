@@ -11,16 +11,18 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Search</h1>
+            <h2>Wpisz nazwę leku</h2>
             <hr>
 
             <div class="field">
+
                 <div class="control" style="display: inline-block;">
                     <input style="width: 1000px;" type="text" class="input is-normal is-focused"
-                           id="medicine_name" placeholder="Enter medicine name">
+                           id="medicine_name" placeholder="Enter medicine name"
+                    oninput="liveSearch();" list="medicines">
                     <datalist id="medicines"></datalist>
                 </div>
-                <button class="button is-link" onclick="submitSearch();">Search</button>
+                <button type="submit" class="button is-link" onclick="submitSearch();">Search</button>
             </div>
         </div>
     </div>
@@ -28,12 +30,11 @@
 
 
 {% endblock %}
-
 {% block script %}
 <script>
+
 function submitSearch() {
     var medicine_name = document.getElementById("medicine_name");
-
     var medicine = {
         name : medicine_name.value
     };
@@ -42,7 +43,8 @@ function submitSearch() {
         cache: "no-cache",
         headers: new Headers({
             'Content-Type': 'application/json',
-            'Medicine-Name': medicine.name
+            'Medicine-Name': medicine.name,
+            'X-Access-Token': '{{session["API_SESSION_TOKEN"]}}'
         })
     })
     .then(function(response) {
@@ -62,5 +64,41 @@ function submitSearch() {
     })
 }
 </script>
+<script>
+function liveSearch() {
+    var medicine_name = document.getElementById("medicine_name").value;
+    console.log(medicine_name);
+
+    if (medicine_name.length != ''){
+        fetch('http://192.168.0.157:5001/livesearch', {
+        cache: "no-cache",
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Medicine-Name': medicine_name
+        })
+    })
+    .then(function(response) {
+
+        if (response.status !== 200) {
+
+            console.log(`Response status was not 200: ${response.status}`)
+            return ;
+        }
+
+        response.json().then(function (data) {
+        localStorage.setItem('data', JSON.stringify(data));
+        var retrieve = localStorage.getItem('data');
+        var finalData = JSON.parse(retrieve);
+        console.log(finalData);
+        var options = '';
+        for (i=0; i<20; i++){
+            options += '<option>' + finalData[i] + '</option>';
+        }
+        document.getElementById('medicines').innerHTML = options;
+        })
+    })
+}}
+</script>
+
 
 {% endblock %}
