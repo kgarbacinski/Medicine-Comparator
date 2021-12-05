@@ -49,6 +49,12 @@ def index():
 
 @livesearch_blueprint.route('/livesearch', methods=['GET', 'POST'])
 def live_search():
+    try:
+        jwt_token = request.headers.get("X-Access-Token")
+        jwt.decode(jwt_token, os.environ.get('SECRET_KEY'), algorithms=["HS256"])
+    except jwt.InvalidTokenError:
+        return Response("WAF: Access Denied for this Host.", status=403)
+
     search_box = request.headers.get('Medicine-Name')
     with MedicineDatabase('../models/medicine.db') as db:
         medicines = db.get_medicines_by_name_like(search_box)

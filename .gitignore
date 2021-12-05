@@ -6,11 +6,8 @@ medicines_app/scrapping/tests/
 venv/
 /__pycache__/
 =======
-venv/
-<<<<<<< HEAD
+
 **/__pycache__/
 .env
-=======
-/__pycache__/
 >>>>>>> 305ab2454804a50a3b303ed74b597b4ed5cffa7d
 >>>>>>> 0a506c7f43c2c1323f71fd9ecb9f65d188e29e9e
