@@ -24,6 +24,6 @@
 After installation requirements remember to add your .env file and setup your SECRET_KEY.
 
 ## Application View
-<img src="https://user-images.githubusercontent.com/51199148/143889345-26d0588f-6e18-4011-8986-1d0a51f0ded4.png">
+<img src="https://user-images.githubusercontent.com/74150981/144911997-f5c732c4-5546-4dd2-ac1b-4378207b6455.png">
 <br>
-<img src="https://user-images.githubusercontent.com/51199148/143887174-7478c067-c19b-474f-ba30-d9a6fd34cb4c.png">
+<img src="https://user-images.githubusercontent.com/74150981/144911934-2bc22541-f775-4386-a40a-8528413fc77e.png">
