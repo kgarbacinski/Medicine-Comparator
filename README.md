@@ -20,7 +20,7 @@
     <li>Regular expressions</li>
   </ul>
 
-##Enviroment configuration
+## Enviroment configuration
 After installation requirements remember to add your .env file and setup your SECRET_KEY.
 
 ## Application View
