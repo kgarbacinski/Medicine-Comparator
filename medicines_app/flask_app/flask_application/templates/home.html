@@ -32,18 +32,19 @@
 {% endblock %}
 {% block script %}
 <script>
+
 function submitSearch() {
     var medicine_name = document.getElementById("medicine_name");
-
     var medicine = {
         name : medicine_name.value
     };
 
-        fetch('http://192.168.0.157:5001/equivalents', {
+        fetch('http://192.168.0.134:5001/equivalents', {
         cache: "no-cache",
         headers: new Headers({
             'Content-Type': 'application/json',
-            'Medicine-Name': medicine.name
+            'Medicine-Name': medicine.name,
+            'X-Access-Token': '{{session["API_SESSION_TOKEN"]}}'
         })
     })
     .then(function(response) {
@@ -93,7 +94,6 @@ function liveSearch() {
         for (i=0; i<20; i++){
             options += '<option>' + finalData[i] + '</option>';
         }
-        console.log(options);
         document.getElementById('medicines').innerHTML = options;
         })
     })
