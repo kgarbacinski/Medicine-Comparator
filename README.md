@@ -13,7 +13,7 @@
 
 ## Technologies
   <ul>
-    <li>Flask</li>
+    <li>Flask1</li>
     <li>SQLAlchemy</li>
     <li>JavaScript</li>
     <li>Bootstrap</li>
