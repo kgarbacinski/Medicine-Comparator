@@ -1,0 +1,13 @@
+services:
+  app:
+    build: ./flask_app
+    volumes:
+      - ./models :/app
+    environment:
+      FLASK_ENV: development
+  api:
+    build: ./equivs_api
+    volumes:
+      - ./models :/app
+    environment:
+      FLASK_ENV: development
