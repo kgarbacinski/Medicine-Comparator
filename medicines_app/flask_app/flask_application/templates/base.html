@@ -1,67 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, height=devide-height">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="colorlib.com">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,800" rel="stylesheet" />
+    <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    {% block title %}
-    {% endblock %}
-    {% block style %}
-    {% endblock %}
-    <title>Medicine Comprasion</title>
-
-</head>
+    <title>Sprawdź Zamiennik!</title>
+  </head>
 
 
-<body class="d-flex flex-column min-vh-100">
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <body>
+    {% block content %}{% endblock %}
+    {% block script %}{% endblock %}
 
-    <a class="navbar-brand" href="/" style="padding-top: 0.65rem;">Szukaj</a>
-<!--  <ul class="navbar-nav">-->
-<!--    <li class="nav-item">-->
-<!--      <a class="nav-link" href="#">O projekcie</a>-->
-<!--    </li>-->
-<!--    <li class="nav-item">-->
-<!--      <a class="nav-link" href="#">Wsparcie</a>-->
-<!--    </li>-->
-<!--  </ul>-->
-  <ul class="nav navbar-nav ml-auto">
-    <li class="nav-item col-2-sm">
-        <a class="nav-link" href="/signup"><i class="fa fa-user-plus" aria-hidden="true"></i>Rejestracja</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i>Logowanie</a>
-    </li>
-  </ul>
-</nav>
-<section class="hero is-light is-medium">
-    <div class="hero-head"></div>
-    <div class="hero-body is-align-items-stretch" style="padding: 1rem 1.5rem;">
-        {% block content %}
-        {% endblock %}
-    </div>
-</section>
-<footer class="page-footer font-small fixed-bottom bg-dark">
-    <div class="footer-copyright text-left pt-3">
-        <ul class="list-inline">
-        <li class="list-inline-item pl-3 border-light">
-          <a href="#" class="text-white">O projekcie</a>
-        </li>
-        <li class="list-inline-item pl-2 border-light">
-          <a href="#" class="text-white">Wsparcie</a>
-        </li>
-      </ul>
+<!--    <script src="{{url_for('static', filename='js/extention/choices.js')}}"></script>-->
+<!--    <script>-->
+<!--      var textPresetVal = new Choices('#medicine_name',-->
+<!--      {-->
+<!--        removeItemButton: true,-->
+<!--      });-->
 
-    </div>
-
-</footer>
-{% block script %}{% endblock %}
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
+<!--    </script>-->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
 

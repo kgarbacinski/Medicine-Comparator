@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}<title>home</title>{% endblock %}
+{% block title %}<title xmlns="http://www.w3.org/1999/html">home</title>{% endblock %}
 {% block content %}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -8,24 +8,71 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <h2>Wpisz nazwę leku</h2>
-            <hr>
+<!--<div class="container">-->
+<!--    <div class="row">-->
+<!--        <div class="col">-->
+<!--            <h2>Wpisz nazwę leku</h2>-->
+<!--            <hr>-->
 
-            <div class="field">
-                <div class="control" style="display: inline-block;">
-                    <input style="width: 1000px;" type="text" class="input is-normal is-focused"
-                           id="medicine_name" placeholder="Enter medicine name"
-                    oninput="liveSearch();" list="medicines">
-                    <datalist id="medicines"></datalist>
-                </div>
-                <button type="submit" class="button is-link" onclick="submitSearch();">Search</button>
+<!--            <div class="field">-->
+<!--                <div class="control" style="display: inline-block;">-->
+<!--                    <input style="width: 1000px;" type="text" class="input is-normal is-focused"-->
+<!--                           id="medicine_name" placeholder="Enter medicine name"-->
+<!--                    oninput="liveSearch();" list="medicines">-->
+<!--                    <datalist id="medicines"></datalist>-->
+<!--                </div>-->
+<!--                <button type="submit" class="button is-link" onclick="submitSearch();">Search</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="container">-->
+<!--    <div class="row height d-flex justify-content-center align-items-center">-->
+<!--        <div class="col-md-8">-->
+<!--            <div class="search"> <i class="fa fa-search"></i>-->
+<!--                <input type="text"-->
+<!--                       id="medicine_name"-->
+<!--                       class="form-control"-->
+<!--                       oninput="liveSearch();"-->
+<!--                       list="medicines"-->
+<!--                       placeholder="Have a question? Ask Now">-->
+<!--                <datalist id="medicines"></datalist>-->
+<!--                <button class="btn btn-primary">Search</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+    <div class="s004">
+      <form>
+        <fieldset>
+          <legend>SPRAWDŹ ZAMIENNIK!</legend>
+          <div class="inner-form">
+            <div class="input-field">
+                <input type="text"
+                       id="medicine_name"
+                       class="form-control"
+                       oninput="liveSearch();"
+                       list="medicines"
+                       placeholder="Have a question? Ask Now">
+                <datalist id="medicines"></datalist>
+              <button class="btn-search" type="button" onclick="submitSearch();">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+              </button>
             </div>
-        </div>
+          </div>
+          <div class="suggestion-wrap">
+            <span>New Arrivals</span>
+            <span>Ladies</span>
+            <span>Mens</span>
+            <span>Accessories</span>
+            <span>Sale</span>
+          </div>
+        </fieldset>
+      </form>
     </div>
-</div>
+
 
 
 {% endblock %}

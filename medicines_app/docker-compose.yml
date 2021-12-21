@@ -2,13 +2,9 @@ version: "3.9"
 services:
   flask_app:
     build: ./flask_app
-#    volumes:
-#      - type: volume
-#        source: ./models
-#        target: /flask_app
+    restart: always
     volumes:
       - ./models:/flask_app/models
-#      - /flask_app/models
     environment:
       FLASK_ENV: development
     env_file: ../.env
@@ -18,13 +14,9 @@ services:
 
   equivs_api:
     build: ./equivs_api
-    #    volumes:
-    #      - type: volume
-    #        source: ./models
-    #        target: /equivs_api
+    restart: always
     volumes:
       - ./models:/equivs_api/models
-    #      - /equivs_api/models
     environment:
       FLASK_ENV: development
     env_file: ../.env
@@ -38,6 +30,7 @@ volumes:
 
 networks:
   mynetwork:
+    enable_ipv6: false
     ipam:
       config:
         - subnet: 172.20.0.0/24
