@@ -1,13 +1,43 @@
+version: "3.9"
 services:
-  app:
+  flask_app:
     build: ./flask_app
+#    volumes:
+#      - type: volume
+#        source: ./models
+#        target: /flask_app
     volumes:
-      - ./models :/app
+      - ./models:/flask_app/models
+#      - /flask_app/models
     environment:
       FLASK_ENV: development
-  api:
+    env_file: ../.env
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.2
+
+  equivs_api:
     build: ./equivs_api
+    #    volumes:
+    #      - type: volume
+    #        source: ./models
+    #        target: /equivs_api
     volumes:
-      - ./models :/app
+      - ./models:/equivs_api/models
+    #      - /equivs_api/models
     environment:
       FLASK_ENV: development
+    env_file: ../.env
+    networks:
+      mynetwork:
+        ipv4_address: 172.20.0.3
+
+volumes:
+  flask_app:
+  equivs_api:
+
+networks:
+  mynetwork:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

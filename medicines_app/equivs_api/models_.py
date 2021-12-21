@@ -1,4 +1,4 @@
-from medicines_app.equivs_api import ma
+from __init__ import ma
 from flask_marshmallow import fields
 
 

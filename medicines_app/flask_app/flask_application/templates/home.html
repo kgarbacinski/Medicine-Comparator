@@ -15,7 +15,6 @@
             <hr>
 
             <div class="field">
-
                 <div class="control" style="display: inline-block;">
                     <input style="width: 1000px;" type="text" class="input is-normal is-focused"
                            id="medicine_name" placeholder="Enter medicine name"
@@ -34,16 +33,13 @@
 <script>
 
 function submitSearch() {
-    var medicine_name = document.getElementById("medicine_name");
-    var medicine = {
-        name : medicine_name.value
-    };
+    var medicine_name = encodeURIComponent(document.getElementById("medicine_name").value);
 
-        fetch('http://192.168.0.157:5001/equivalents', {
+        fetch('http://172.20.0.3:5001/equivalents', {
         cache: "no-cache",
         headers: new Headers({
-            'Content-Type': 'application/json',
-            'Medicine-Name': medicine.name,
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Medicine-Name': medicine_name,
             'X-Access-Token': '{{session["API_SESSION_TOKEN"]}}'
         })
     })
@@ -59,18 +55,16 @@ function submitSearch() {
         localStorage.setItem('data', JSON.stringify(data));
         var retrieve = localStorage.getItem('data');
         var finalData = JSON.parse(retrieve);
-        window.location.href = 'http://127.0.0.1:5000/search_result'
+        window.location.href = 'http://172.20.0.2:5000/search_result'
         })
     })
 }
 </script>
 <script>
 function liveSearch() {
-    var medicine_name = document.getElementById("medicine_name").value;
-    console.log(medicine_name);
-
+    var medicine_name = encodeURIComponent(document.getElementById("medicine_name").value);
     if (medicine_name.length != ''){
-        fetch('http://192.168.0.157:5001/livesearch', {
+        fetch('http://172.20.0.3:5001/livesearch', {
         cache: "no-cache",
         headers: new Headers({
             'Content-Type': 'application/json',

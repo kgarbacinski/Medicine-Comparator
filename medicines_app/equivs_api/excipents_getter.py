@@ -1,9 +1,9 @@
-from medicines_app.models.database_setup import MedicineDatabase
+from models.database_setup import MedicineDatabase
 
 class ExcipentsGetter:
 
     def get_excipents(self, medicine_id):
-        with MedicineDatabase('../models/medicine.db') as db:
+        with MedicineDatabase('models/medicine.db') as db:
             excipents = db.get_medicinal_product_excipents(medicine_id).fetchall()
             return self.__get_excipents(excipents)
 

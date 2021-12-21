@@ -7,4 +7,5 @@ WTForms==3.0.0
 flask-marshmallow==0.14.0
 Werkzeug==2.0.2
 python-dotenv==0.19.2
-
+Flask-Session
+pyjwt
