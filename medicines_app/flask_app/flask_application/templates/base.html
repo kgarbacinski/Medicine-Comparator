@@ -7,28 +7,46 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,800" rel="stylesheet" />
-    <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" />
     <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" />
+    {% block stylesheet %}{% endblock %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Sprawdź Zamiennik!</title>
   </head>
 
 
   <body>
+  <nav class="navbar navbar-expand-sm navbar-light bg-light nav-and-footer">
+
+    <a class="navbar-brand" href="/" style="padding-top: 0.65rem; color: rgba(0,0,0,.5);">Szukaj</a>
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item col-2-sm">
+        <a class="nav-link" href="/signup"><i class="fa fa-user-plus" aria-hidden="true"></i> Rejestracja </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Logowanie</a>
+    </li>
+  </ul>
+</nav>
     {% block content %}{% endblock %}
     {% block script %}{% endblock %}
 
-<!--    <script src="{{url_for('static', filename='js/extention/choices.js')}}"></script>-->
-<!--    <script>-->
-<!--      var textPresetVal = new Choices('#medicine_name',-->
-<!--      {-->
-<!--        removeItemButton: true,-->
-<!--      });-->
+<footer class="page-footer font-small fixed-bottom nav-and-footer">
+    <div class="footer-copyright text-left pt-3">
+        <ul class="list-inline">
+        <li class="list-inline-item pl-3 border-light">
+          <a href="#" class="text-dark">O projekcie</a>
+        </li>
+        <li class="list-inline-item pl-2 border-light">
+          <a href="#" class="text-dark">Wsparcie</a>
+        </li>
+      </ul>
+    </div>
+</footer>
 
-<!--    </script>-->
+
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+  </body>
 </html>
 
