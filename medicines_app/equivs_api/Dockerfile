@@ -1,5 +1,5 @@
 FROM python:latest
-WORKDIR /equivs_api/
+WORKDIR /equivs_api
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .

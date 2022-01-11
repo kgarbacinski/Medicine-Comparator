@@ -317,6 +317,17 @@ legend {
   /* 1 */
 }
 
+temp {
+}
+
+legend>span {
+  background-color: rgba(255,255,255,0.5);
+  border-radius: 25px;
+  padding: 0 5%;
+  margin: 10px 10px;
+  color: rgb(50, 50, 50);
+}
+
 /**
  * 1. Add the correct display in IE 9-.
  * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.

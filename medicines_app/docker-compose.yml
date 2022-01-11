@@ -1,8 +1,7 @@
-version: "3.9"
+version: "3"
 services:
   flask_app:
     build: ./flask_app
-    restart: always
     volumes:
       - ./models:/flask_app/models
     environment:
@@ -14,7 +13,6 @@ services:
 
   equivs_api:
     build: ./equivs_api
-    restart: always
     volumes:
       - ./models:/equivs_api/models
     environment:
@@ -24,9 +22,9 @@ services:
       mynetwork:
         ipv4_address: 172.20.0.3
 
-volumes:
-  flask_app:
-  equivs_api:
+#volumes:
+#  flask_app:
+#  equivs_api:
 
 networks:
   mynetwork:
