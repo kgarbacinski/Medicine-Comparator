@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  flask_app:
+    volumes:
+      - .:/app
+  equivs_api:
+    volumes:
+      - .:/app

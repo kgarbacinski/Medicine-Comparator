@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
-{% block title %}<title>home</title>{% endblock %}
+{% block title %}<title xmlns="http://www.w3.org/1999/html">home</title>{% endblock %}
+{% block stylesheet %}
+    <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" />
+{% endblock %}
 {% block content %}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -8,42 +11,56 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <h2>Wpisz nazwę leku</h2>
-            <hr>
-
-            <div class="field">
-
-                <div class="control" style="display: inline-block;">
-                    <input style="width: 1000px;" type="text" class="input is-normal is-focused"
-                           id="medicine_name" placeholder="Enter medicine name"
-                    oninput="liveSearch();" list="medicines">
-                    <datalist id="medicines"></datalist>
-                </div>
-                <button type="submit" class="button is-link" onclick="submitSearch();">Search</button>
+    <div class="s004">
+      <form>
+        <fieldset>
+          <legend><span>SPRAWDŹ ZAMIENNIK!</span></legend>
+          <div class="inner-form">
+            <div class="input-field">
+                <input type="text"
+                       id="medicine_name"
+                       class="form-control"
+                       oninput="liveSearch();"
+                       list="medicines"
+                       autocomplete="off"
+                       placeholder="Wpisz nazwę leku, lub zeskanuj kod EAN">
+                <datalist id="medicines"></datalist>
+              <button id="search-button" class="btn-search" type="button" onclick="submitSearch();">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+              </button>
             </div>
-        </div>
+          </div>
+
+        </fieldset>
+      </form>
     </div>
-</div>
+
 
 
 {% endblock %}
 {% block script %}
 <script>
+var input = document.getElementById("medicine_name");
+input.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("search-button").click();
+  }
+});
+</script>
+
+<script>
 
 function submitSearch() {
-    var medicine_name = document.getElementById("medicine_name");
-    var medicine = {
-        name : medicine_name.value
-    };
+    var medicine_name = encodeURIComponent(document.getElementById("medicine_name").value);
 
-        fetch('http://192.168.0.134:5001/equivalents', {
+        fetch('http://172.20.0.3:5001/equivalents', {
         cache: "no-cache",
         headers: new Headers({
-            'Content-Type': 'application/json',
-            'Medicine-Name': medicine.name,
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Medicine-Name': medicine_name,
             'X-Access-Token': '{{session["API_SESSION_TOKEN"]}}'
         })
     })
@@ -59,22 +76,21 @@ function submitSearch() {
         localStorage.setItem('data', JSON.stringify(data));
         var retrieve = localStorage.getItem('data');
         var finalData = JSON.parse(retrieve);
-        window.location.href = 'http://127.0.0.1:5000/search_result'
+        window.location.href = 'http://172.20.0.2:5000/search_result'
         })
     })
 }
 </script>
 <script>
 function liveSearch() {
-    var medicine_name = document.getElementById("medicine_name").value;
-    console.log(medicine_name);
-
+    var medicine_name = encodeURIComponent(document.getElementById("medicine_name").value);
     if (medicine_name.length != ''){
-        fetch('http://192.168.0.157:5001/livesearch', {
+        fetch('http://172.20.0.3:5001/livesearch', {
         cache: "no-cache",
         headers: new Headers({
             'Content-Type': 'application/json',
-            'Medicine-Name': medicine_name
+            'Medicine-Name': medicine_name,
+            'X-Access-Token': '{{session["API_SESSION_TOKEN"]}}'
         })
     })
     .then(function(response) {

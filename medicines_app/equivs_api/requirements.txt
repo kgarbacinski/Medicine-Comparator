@@ -1,0 +1,4 @@
+flask
+flask-marshmallow
+flask_cors
+pyjwt

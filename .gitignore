@@ -1,10 +1,8 @@
 medicines_app/scrapping/tests/
-
 .idea/
 venv/
-<<<<<<< HEAD
 **/__pycache__/
 .env
-=======
-/__pycache__/
->>>>>>> 305ab2454804a50a3b303ed74b597b4ed5cffa7d
+**/flask_session/
+*.pyc
+

@@ -68,3 +68,11 @@ class SearchView(MethodView):
 
     def get(self):
         return render_template(self.template_name)
+
+
+class AboutView(MethodView):
+    def __init__(self, template_name):
+        self.template_name = template_name
+
+    def get(self):
+        return render_template(self.template_name)

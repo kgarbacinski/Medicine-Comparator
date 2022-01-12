@@ -1,9 +1,9 @@
-from medicines_app.equivs_api.excipents_getter import ExcipentsGetter
-from medicines_app.models.database_setup import MedicineDatabase
+from excipents_getter import ExcipentsGetter
+from models.database_setup import MedicineDatabase
 
 class MedicinalProduct:
     def __init__(self, medicine_id):
-        with MedicineDatabase('../models/medicine.db') as db:
+        with MedicineDatabase('models/medicine.db') as db:
             db_data = db.get_medicine_by_id(medicine_id)
         self.id = db_data[0]
         self.name = db_data[1]
@@ -21,7 +21,7 @@ class MedicinalProduct:
         return []
 
     def get_equivalents(self) -> list:
-        with MedicineDatabase('../models/medicine.db') as db:
+        with MedicineDatabase('models/medicine.db') as db:
             db.delete_from_tmp()
             db.insert_into_tmp(self.id)
             equivsalents = db.get_medicine_equivalents()
