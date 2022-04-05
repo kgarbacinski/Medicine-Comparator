@@ -7,7 +7,11 @@ def create_app():
     app = Flask(__name__)
 
     app.config['CORS_HEADERS'] = ['Content-Type', 'Medicine-Name', 'X-Access-Token']
-    cors = CORS(app, resources={r'/': {'origins': 'http://172.20.0.2:5000/'}})
+    # cors = CORS(app, resources={r'/': {'origins': 'http://flask_app:5000/'}})
+    # cors = CORS(app)
+    cors = CORS(app, resources={r"http://flask_app:5000/": {"origins": "*"
+        , "allow_headers": "*", "expose_headers": "*"
+                                       }})
 
 
     ma.init_app(app=app)

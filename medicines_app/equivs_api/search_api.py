@@ -16,7 +16,7 @@ medicine_schema = MedicinesSchema(many=True)
 
 
 @get_equivalents_blueprint.route('/equivalents', methods=['GET', 'POST'])
-@cross_origin(origin='172.20.0.2:5000',headers=['Content-Type', 'Medicine-Name', 'X-Access-Token'])
+@cross_origin(origin='http://flask_app:5000',headers=['Content-Type', 'Medicine-Name', 'X-Access-Token'])
 def get_equivalents():
     try:
         jwt_token = request.headers.get("X-Access-Token")
@@ -46,13 +46,13 @@ def __get_medicine_id(request_medicine):
 
 
 @index_blueprint.route('/')
-@cross_origin(origin='172.20.0.2:5000', headers=['Content-Type', 'Medicine-Name', 'X-Access-Token'])
+@cross_origin(origin='http://flask_app:5000', headers=['Content-Type', 'Medicine-Name', 'X-Access-Token'])
 def index():
     return render_template("index.html")
 
 
 @livesearch_blueprint.route('/livesearch', methods=['GET', 'POST'])
-@cross_origin(origin='172.20.0.2:5000', headers=['Content-Type', 'Medicine-Name', 'X-Access-Token'])
+@cross_origin(origin='http://flask_app:5000', headers=['Content-Type', 'Medicine-Name', 'X-Access-Token'])
 def live_search():
     try:
         jwt_token = request.headers.get("X-Access-Token")
